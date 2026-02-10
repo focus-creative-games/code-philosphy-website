@@ -4,6 +4,7 @@
     <section class="hero-section">
       <div class="hero-glow hero-glow-1"></div>
       <div class="hero-glow hero-glow-2"></div>
+      <canvas ref="canvasRef" class="hero-canvas"></canvas>
       <div class="hero-content fade-in-up">
         <h1 class="hero-title">
           <span class="gradient-text">Code Philosophy</span>
@@ -50,7 +51,7 @@
     <section class="product-section product-section-alt">
       <div class="product-bg product-bg-gradient"></div>
       <div class="product-glow"></div>
-      <div class="product-inner product-inner-reverse fade-in-up">
+      <div class="product-inner fade-in-up">
         <div class="product-glass glass-card">
           <div class="product-badge product-badge-new">全新产品</div>
           <h2 class="product-name gradient-text">LeanCLR</h2>
@@ -135,6 +136,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useParticleCanvas } from '../composables/useParticleCanvas'
+
+const canvasRef = ref<HTMLCanvasElement | null>(null)
+useParticleCanvas(canvasRef)
+
 const logoRows = [
   [
     { src: '/images/logos/tencent.png', alt: '腾讯游戏' },
@@ -259,9 +266,17 @@ const logoRows = [
   background: rgba(139, 92, 246, 0.1);
 }
 
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.45;
+  pointer-events: auto;
+}
+
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   padding: 40px 20px;
   max-width: 800px;
@@ -382,21 +397,14 @@ const logoRows = [
 .product-inner {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: 100px 40px;
   width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.product-inner-reverse {
-  justify-content: flex-start;
 }
 
 .product-glass {
-  max-width: 560px;
-  padding: 48px;
+  padding: 56px 60px;
 }
 
 .product-badge {
@@ -622,15 +630,12 @@ const logoRows = [
 
 /* Responsive */
 @media (max-width: 921px) {
-  .product-inner,
-  .product-inner-reverse {
-    justify-content: center;
+  .product-inner {
     padding: 60px 20px;
   }
 
   .product-glass {
-    max-width: 100%;
-    padding: 32px;
+    padding: 36px 28px;
   }
 
   .product-name {
