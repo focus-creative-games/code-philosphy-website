@@ -24,70 +24,58 @@
       </div>
     </section>
 
-    <!-- Product: HybridCLR -->
-    <section class="product-section product-section-hybridclr">
-      <div class="product-bg product-bg-gradient-blue"></div>
-      <div class="product-glow product-glow-blue"></div>
-      <div class="product-inner fade-in-up">
-        <div class="product-glass glass-card">
-          <div class="product-badge">核心产品</div>
-          <h2 class="product-name gradient-text">HybridCLR</h2>
-          <p class="product-tagline">Unity 全平台原生 C# 热更方案</p>
-          <p class="product-desc">特性完整、零成本、高性能、低内存。已有数千商业项目接入，百款游戏双端上线。</p>
-          <div class="product-tags">
-            <span class="tag"><strong>7700+</strong> GitHub Stars</span>
-            <span class="tag"><strong>千款</strong>商业项目</span>
-            <span class="tag">MIT 开源</span>
-          </div>
-          <div class="product-buttons">
-            <router-link to="/hybridclr" class="btn-glow btn-glow-primary">了解更多</router-link>
-            <a href="https://github.com/focus-creative-games/hybridclr" target="_blank" class="btn-glow btn-glow-outline">GitHub</a>
-          </div>
+    <!-- Product Showcase (Tab Switch) -->
+    <section class="showcase-section">
+      <div class="showcase-glow" :class="'showcase-glow-' + activeProduct"></div>
+      <div class="showcase-inner fade-in-up">
+        <h2 class="showcase-heading">核心产品</h2>
+        <!-- Tabs -->
+        <div class="showcase-tabs">
+          <button
+            v-for="p in products"
+            :key="p.id"
+            class="showcase-tab"
+            :class="{ active: activeProduct === p.id }"
+            @click="switchProduct(p.id)"
+          >
+            <span class="tab-name">{{ p.name }}</span>
+            <span class="tab-tagline">{{ p.tagline }}</span>
+          </button>
         </div>
-      </div>
-    </section>
 
-    <!-- Product: LeanCLR -->
-    <section class="product-section product-section-alt">
-      <div class="product-bg product-bg-gradient"></div>
-      <div class="product-glow"></div>
-      <div class="product-inner fade-in-up">
-        <div class="product-glass glass-card">
-          <div class="product-badge product-badge-new">全新产品</div>
-          <h2 class="product-name gradient-text">LeanCLR</h2>
-          <p class="product-tagline">轻量级跨平台 CLR 运行时</p>
-          <p class="product-desc">极致精简、轻松嵌入、低内存占用。单线程版 X64/WebAssembly 仅 600KB，可裁剪至 300KB。面向移动/H5/小游戏等资源受限平台。</p>
-          <div class="product-tags">
-            <span class="tag"><strong>600KB</strong> 极致精简</span>
-            <span class="tag">纯 <strong>C++17</strong></span>
-            <span class="tag">全平台</span>
-          </div>
-          <div class="product-buttons">
-            <router-link to="/leanclr" class="btn-glow btn-glow-primary">了解更多</router-link>
-            <a href="https://github.com/focus-creative-games/leanclr" target="_blank" class="btn-glow btn-glow-outline">GitHub</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Product: Luban -->
-    <section class="product-section product-section-luban">
-      <div class="product-bg product-bg-gradient-green"></div>
-      <div class="product-glow product-glow-green"></div>
-      <div class="product-inner fade-in-up">
-        <div class="product-glass glass-card">
-          <h2 class="product-name gradient-text">Luban</h2>
-          <p class="product-tagline">强大灵活的游戏配置解决方案</p>
-          <p class="product-desc">增强的 Excel 格式，完整的类型系统，强大的数据校验，支持十余种编程语言代码生成。</p>
-          <div class="product-tags">
-            <span class="tag"><strong>4300+</strong> GitHub Stars</span>
-            <span class="tag"><strong>13+</strong> 语言支持</span>
-            <span class="tag">MIT 开源</span>
-          </div>
-          <div class="product-buttons">
-            <router-link to="/luban" class="btn-glow btn-glow-primary">了解更多</router-link>
-            <a href="https://www.datable.cn/" target="_blank" class="btn-glow btn-glow-outline">文档站</a>
-          </div>
+        <!-- Product Panel -->
+        <div class="showcase-panel">
+          <TransitionGroup name="panel">
+            <div
+              v-for="p in products"
+              v-show="activeProduct === p.id"
+              :key="p.id"
+              class="panel-content"
+            >
+              <div class="panel-left">
+                <div class="panel-badge" :class="p.badgeClass">{{ p.badge }}</div>
+                <h3 class="panel-title gradient-text">{{ p.name }}</h3>
+                <p class="panel-tagline">{{ p.tagline }}</p>
+                <p class="panel-desc">{{ p.desc }}</p>
+                <div class="panel-buttons">
+                  <router-link :to="p.detailLink" class="btn-glow btn-glow-primary">了解更多</router-link>
+                  <a :href="p.externalLink" target="_blank" class="btn-glow btn-glow-outline">{{ p.externalLabel }}</a>
+                </div>
+              </div>
+              <div class="panel-right">
+                <div class="stat-grid">
+                  <div
+                    v-for="(s, si) in p.stats"
+                    :key="si"
+                    class="stat-card glass-card"
+                  >
+                    <div class="stat-value">{{ s.value }}</div>
+                    <div class="stat-label">{{ s.label }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TransitionGroup>
         </div>
       </div>
     </section>
@@ -141,6 +129,79 @@ import { useParticleCanvas } from '../composables/useParticleCanvas'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 useParticleCanvas(canvasRef)
+
+// Product showcase data
+const activeProduct = ref('hybridclr')
+let autoTimer: ReturnType<typeof setInterval> | null = null
+
+const products = [
+  {
+    id: 'hybridclr',
+    name: 'HybridCLR',
+    badge: '核心产品',
+    badgeClass: 'badge-blue',
+    tagline: 'Unity 全平台原生 C# 热更方案',
+    desc: '特性完整、零成本、高性能、低内存。已有数千商业项目接入，百款游戏双端上线。开创性的 DHE 技术让热更运行达到原生 AOT 水平。',
+    detailLink: '/hybridclr',
+    externalLink: 'https://github.com/focus-creative-games/hybridclr',
+    externalLabel: 'GitHub',
+    stats: [
+      { value: '7700+', label: 'GitHub Stars' },
+      { value: '千款', label: '商业项目接入' },
+      { value: 'MIT', label: '开源协议' },
+      { value: '2700+', label: '测试用例通过' },
+    ],
+  },
+  {
+    id: 'leanclr',
+    name: 'LeanCLR',
+    badge: '全新产品',
+    badgeClass: 'badge-purple',
+    tagline: '轻量级跨平台 CLR 运行时',
+    desc: '极致精简、轻松嵌入、低内存占用。单线程版 X64/WebAssembly 仅 600KB，可裁剪至 300KB。面向移动/H5/小游戏等资源受限平台。',
+    detailLink: '/leanclr',
+    externalLink: 'https://github.com/focus-creative-games/leanclr',
+    externalLabel: 'GitHub',
+    stats: [
+      { value: '600KB', label: '极致精简体积' },
+      { value: 'C++17', label: '纯净零依赖' },
+      { value: 'AOT+', label: '混合执行模式' },
+      { value: '全平台', label: '移动/H5/小游戏' },
+    ],
+  },
+  {
+    id: 'luban',
+    name: 'Luban',
+    badge: '热门项目',
+    badgeClass: 'badge-green',
+    tagline: '强大灵活的游戏配置解决方案',
+    desc: '增强的 Excel 格式，完整的类型系统，强大的数据校验，支持十余种编程语言代码生成。从小型到超大型项目的全覆盖配置工作流。',
+    detailLink: '/luban',
+    externalLink: 'https://www.datable.cn/',
+    externalLabel: '文档站',
+    stats: [
+      { value: '4300+', label: 'GitHub Stars' },
+      { value: '13+', label: '语言代码生成' },
+      { value: 'MIT', label: '开源协议' },
+      { value: '全引擎', label: 'Unity/UE/Godot' },
+    ],
+  },
+]
+
+function switchProduct(id: string) {
+  activeProduct.value = id
+  resetAutoSwitch()
+}
+
+function resetAutoSwitch() {
+  if (autoTimer) clearInterval(autoTimer)
+  autoTimer = setInterval(() => {
+    const idx = products.findIndex((p) => p.id === activeProduct.value)
+    activeProduct.value = products[(idx + 1) % products.length].id
+  }, 6000)
+}
+
+resetAutoSwitch()
 
 const logoRows = [
   [
@@ -232,7 +293,7 @@ const logoRows = [
 </script>
 
 <style scoped>
-/* Hero Section */
+/* ═══ Hero Section ═══ */
 .hero-section {
   position: relative;
   min-height: 100vh;
@@ -250,21 +311,8 @@ const logoRows = [
   pointer-events: none;
 }
 
-.hero-glow-1 {
-  width: 600px;
-  height: 600px;
-  top: -100px;
-  right: -100px;
-  background: rgba(59, 130, 246, 0.12);
-}
-
-.hero-glow-2 {
-  width: 500px;
-  height: 500px;
-  bottom: -50px;
-  left: -100px;
-  background: rgba(139, 92, 246, 0.1);
-}
+.hero-glow-1 { width: 600px; height: 600px; top: -100px; right: -100px; background: rgba(59, 130, 246, 0.12); }
+.hero-glow-2 { width: 500px; height: 500px; bottom: -50px; left: -100px; background: rgba(139, 92, 246, 0.1); }
 
 .hero-canvas {
   position: absolute;
@@ -282,413 +330,240 @@ const logoRows = [
   max-width: 800px;
 }
 
-.hero-title {
-  font-size: clamp(42px, 6vw, 72px);
-  font-weight: 800;
-  margin-bottom: 24px;
-  letter-spacing: -1px;
+.hero-title { font-size: clamp(42px, 6vw, 72px); font-weight: 800; margin-bottom: 24px; letter-spacing: -1px; }
+.hero-subtitle { font-size: clamp(20px, 3vw, 28px); font-weight: 500; color: rgba(255,255,255,0.85); margin-bottom: 16px; letter-spacing: 2px; }
+.hero-desc { font-size: clamp(16px, 2vw, 20px); color: rgba(255,255,255,0.5); margin-bottom: 40px; }
+.hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+.hero-scroll-hint { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1; }
+.scroll-arrow { width: 24px; height: 24px; border-right: 2px solid rgba(255,255,255,0.3); border-bottom: 2px solid rgba(255,255,255,0.3); transform: rotate(45deg); animation: scrollBounce 2s infinite; }
+@keyframes scrollBounce { 0%,100% { transform: rotate(45deg) translateY(0); opacity: 0.3; } 50% { transform: rotate(45deg) translateY(8px); opacity: 0.8; } }
+
+/* ═══ Product Showcase ═══ */
+.showcase-section {
+  position: relative;
+  min-height: 80vh;
+  background: var(--color-bg-alt);
+  overflow: hidden;
+  padding: 100px 0 80px;
 }
 
-.hero-subtitle {
-  font-size: clamp(20px, 3vw, 28px);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 16px;
-  letter-spacing: 2px;
+.showcase-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: background 0.8s ease;
 }
 
-.hero-desc {
-  font-size: clamp(16px, 2vw, 20px);
-  color: rgba(255, 255, 255, 0.5);
+.showcase-glow-hybridclr { background: rgba(59, 130, 246, 0.08); }
+.showcase-glow-leanclr { background: rgba(139, 92, 246, 0.08); }
+.showcase-glow-luban { background: rgba(16, 185, 129, 0.08); }
+
+.showcase-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.showcase-heading {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-text-light);
+  text-align: center;
   margin-bottom: 40px;
 }
 
-.hero-cta {
+/* Tabs */
+.showcase-tabs {
   display: flex;
-  gap: 16px;
   justify-content: center;
-  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 56px;
 }
 
-.hero-scroll-hint {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-}
-
-.scroll-arrow {
-  width: 24px;
-  height: 24px;
-  border-right: 2px solid rgba(255, 255, 255, 0.3);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  transform: rotate(45deg);
-  animation: scrollBounce 2s infinite;
-}
-
-@keyframes scrollBounce {
-  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.3; }
-  50% { transform: rotate(45deg) translateY(8px); opacity: 0.8; }
-}
-
-/* Product Sections */
-.product-section {
-  position: relative;
-  min-height: 600px;
+.showcase-tab {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  overflow: hidden;
+  gap: 4px;
+  padding: 16px 32px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: all 0.35s ease;
+  min-width: 180px;
 }
 
-.product-bg {
-  position: absolute;
-  inset: 0;
+.showcase-tab:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* HybridCLR: blue accent */
-.product-bg-gradient-blue {
-  background: linear-gradient(135deg, #0a0f1e 0%, #0c1a3a 50%, #0a0f1e 100%);
+.showcase-tab.active {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
 }
 
-.product-glow-blue {
-  position: absolute;
-  top: 50%;
-  right: 10%;
-  transform: translate(0, -50%);
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 60%);
-  pointer-events: none;
+.tab-name {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--font-heading);
 }
 
-/* LeanCLR: purple accent */
-.product-bg-gradient {
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+.tab-tagline {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.6;
 }
 
-.product-glow {
-  position: absolute;
-  top: 50%;
-  left: 30%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.12), transparent 60%);
-  pointer-events: none;
-}
-
-/* Luban: teal/emerald accent */
-.product-bg-gradient-green {
-  background: linear-gradient(135deg, #0a0f1e 0%, #0a2520 50%, #0a0f1e 100%);
-}
-
-.product-glow-green {
-  position: absolute;
-  top: 50%;
-  left: 15%;
-  transform: translate(0, -50%);
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent 60%);
-  pointer-events: none;
-}
-
-.product-inner {
+/* Panel */
+.showcase-panel {
   position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 100px 40px;
-  width: 100%;
+  min-height: 340px;
 }
 
-.product-glass {
-  padding: 56px 60px;
+.panel-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
 }
 
-.product-badge {
+.panel-badge {
   display: inline-block;
   padding: 4px 14px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 1px;
-  text-transform: uppercase;
-  background: rgba(59, 130, 246, 0.15);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.2);
   margin-bottom: 20px;
 }
 
-.product-badge-new {
-  background: rgba(139, 92, 246, 0.15);
-  color: #a78bfa;
-  border-color: rgba(139, 92, 246, 0.2);
-}
+.badge-blue { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
+.badge-purple { background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.2); }
+.badge-green { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
 
-.product-name {
-  font-size: 48px;
-  font-weight: 800;
-  margin-bottom: 12px;
-}
+.panel-title { font-size: 44px; font-weight: 800; margin-bottom: 12px; }
+.panel-tagline { font-size: 20px; color: rgba(255,255,255,0.65); margin-bottom: 16px; font-weight: 500; }
+.panel-desc { font-size: 15px; color: rgba(255,255,255,0.45); line-height: 1.8; margin-bottom: 32px; }
+.panel-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
 
-.product-tagline {
-  font-size: 22px;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-.product-desc {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.8;
-  margin-bottom: 24px;
-}
-
-.product-tags {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-}
-
-.tag {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.tag strong {
-  color: #ffffff;
-}
-
-.product-buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-/* More Products */
-.more-products-section {
-  padding: 80px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.more-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--color-heading);
-  margin-bottom: 32px;
-  text-align: center;
-}
-
-.more-grid {
+/* Stats grid */
+.stat-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.more-card {
-  padding: 32px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.more-card:hover {
-  border-color: rgba(59, 130, 246, 0.2);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
-}
-
-.more-card h3 {
-  font-size: 22px;
-  font-weight: 700;
-  color: #f1f5f9;
-  margin-bottom: 10px;
-}
-
-.more-card p {
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
-.more-card-links {
-  display: flex;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.more-link {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-primary);
-}
-
-/* Users Section */
-.users-section {
-  position: relative;
-  background: #f8fafc;
-  padding: 0 0 80px;
-}
-
-.users-curve {
-  height: 80px;
-  background: var(--color-bg);
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
-}
-
-.users-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 40px 0;
-}
-
-.users-header {
+.stat-card {
+  padding: 28px 20px;
   text-align: center;
-  margin-bottom: 50px;
-}
-
-.section-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 12px;
-}
-
-.section-subtitle-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.section-subtitle {
-  font-size: 13px;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-weight: 600;
-}
-
-.section-line {
-  display: block;
-  width: 40px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
-}
-
-.logo-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.logo-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 130px;
-  height: 72px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
   transition: all 0.3s ease;
 }
 
-.logo-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
+.stat-card:hover {
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateY(-2px);
 }
 
-.logo-item img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  filter: grayscale(30%);
-  opacity: 0.75;
-  transition: all 0.3s ease;
+.stat-value { font-size: 28px; font-weight: 800; color: #ffffff; margin-bottom: 6px; font-family: var(--font-heading); }
+.stat-label { font-size: 13px; color: rgba(255,255,255,0.45); }
+
+/* Panel transition */
+.panel-enter-active,
+.panel-leave-active {
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-.logo-item:hover img {
-  filter: grayscale(0%);
-  opacity: 1;
+.panel-enter-from {
+  opacity: 0;
+  transform: translateY(15px);
 }
 
-/* Responsive */
+.panel-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.panel-leave-active {
+  position: absolute;
+  width: 100%;
+}
+
+/* ═══ More Products ═══ */
+.more-products-section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+.more-title { font-size: 28px; font-weight: 700; color: var(--color-heading); margin-bottom: 32px; text-align: center; }
+.more-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.more-card { padding: 32px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+.more-card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(59,130,246,0.1); }
+.more-card h3 { font-size: 22px; font-weight: 700; color: #f1f5f9; margin-bottom: 10px; }
+.more-card p { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 16px; }
+.more-card-links { display: flex; gap: 16px; }
+.more-link { font-size: 14px; font-weight: 600; color: var(--color-primary); }
+
+/* ═══ Users Section ═══ */
+.users-section { position: relative; background: #f8fafc; padding: 0 0 80px; }
+.users-curve { height: 80px; background: var(--color-bg-alt); border-radius: 0 0 50% 50% / 0 0 100% 100%; }
+.users-content { max-width: 1200px; margin: 0 auto; padding: 40px 40px 0; }
+.users-header { text-align: center; margin-bottom: 50px; }
+.section-title { font-size: 36px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+.section-subtitle-wrap { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.section-subtitle { font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; }
+.section-line { display: block; width: 40px; height: 1px; background: linear-gradient(90deg, transparent, #cbd5e1, transparent); }
+
+.logo-grid { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
+.logo-item { display: flex; align-items: center; justify-content: center; width: 130px; height: 72px; padding: 12px; background: #ffffff; border-radius: 10px; border: 1px solid #e2e8f0; transition: all 0.3s ease; }
+.logo-item:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); border-color: #cbd5e1; }
+.logo-item img { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(30%); opacity: 0.75; transition: all 0.3s ease; }
+.logo-item:hover img { filter: grayscale(0%); opacity: 1; }
+
+/* ═══ Responsive ═══ */
 @media (max-width: 921px) {
-  .product-inner {
-    padding: 60px 20px;
-  }
+  .showcase-section { padding: 80px 0 60px; }
 
-  .product-glass {
-    padding: 36px 28px;
-  }
+  .showcase-tabs { flex-direction: column; align-items: center; }
+  .showcase-tab { min-width: 260px; }
 
-  .product-name {
-    font-size: 36px;
-  }
-
-  .product-tagline {
-    font-size: 18px;
-  }
-
-  .more-grid {
+  .panel-content {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
 
-  .logo-item {
-    width: 100px;
-    height: 56px;
-    padding: 8px;
-  }
+  .panel-title { font-size: 36px; }
+
+  .more-grid { grid-template-columns: 1fr; }
+  .logo-item { width: 100px; height: 56px; padding: 8px; }
 }
 
 @media (max-width: 544px) {
-  .hero-section {
-    min-height: 90vh;
-  }
+  .hero-section { min-height: 90vh; }
 
-  .product-section {
-    min-height: auto;
-  }
+  .showcase-inner { padding: 0 20px; }
+  .showcase-tab { min-width: auto; width: 100%; padding: 12px 20px; }
+  .tab-name { font-size: 16px; }
+  .panel-title { font-size: 30px; }
+  .stat-grid { gap: 10px; }
+  .stat-card { padding: 20px 12px; }
+  .stat-value { font-size: 22px; }
 
-  .product-glass {
-    padding: 24px;
-  }
-
-  .product-name {
-    font-size: 30px;
-  }
-
-  .more-products-section {
-    padding: 60px 20px;
-  }
-
-  .logo-item {
-    width: 80px;
-    height: 48px;
-  }
-
-  .users-content {
-    padding: 30px 16px 0;
-  }
-
-  .section-title {
-    font-size: 28px;
-  }
+  .more-products-section { padding: 60px 20px; }
+  .logo-item { width: 80px; height: 48px; }
+  .users-content { padding: 30px 16px 0; }
+  .section-title { font-size: 28px; }
 }
 </style>
