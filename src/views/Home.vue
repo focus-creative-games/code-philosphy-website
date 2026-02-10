@@ -165,7 +165,7 @@ const products = [
     stats: [
       { value: '600KB', label: '极致精简体积' },
       { value: 'C++17', label: '纯净零依赖' },
-      { value: 'AOT+', label: '混合执行模式' },
+      { value: 'AOT+Interpreter', label: '混合执行模式' },
       { value: '全平台', label: '移动/H5/小游戏' },
     ],
   },
