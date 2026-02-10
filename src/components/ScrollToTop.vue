@@ -1,14 +1,16 @@
 <template>
-  <button
-    v-show="visible"
-    class="scroll-to-top"
-    @click="scrollToTop"
-    aria-label="回到顶部"
-  >
-    <svg width="20" height="12" viewBox="57 35.171 26 16.043" fill="currentColor">
-      <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" transform="rotate(180, 70, 43.192)" />
-    </svg>
-  </button>
+  <Transition name="scroll-btn">
+    <button
+      v-show="visible"
+      class="scroll-to-top"
+      @click="scrollToTop"
+      aria-label="回到顶部"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 15l-6-6-6 6"/>
+      </svg>
+    </button>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -31,12 +33,12 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 <style scoped>
 .scroll-to-top {
   position: fixed;
-  right: 30px;
-  bottom: 30px;
-  width: 42px;
-  height: 42px;
-  border-radius: 4px;
-  background: #046bd2;
+  right: 28px;
+  bottom: 28px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: #ffffff;
   border: none;
   cursor: pointer;
@@ -44,12 +46,23 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   align-items: center;
   justify-content: center;
   z-index: 99;
-  transition: background 0.3s, opacity 0.3s;
-  opacity: 0.8;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
 }
 
 .scroll-to-top:hover {
-  background: #045cb4;
-  opacity: 1;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+.scroll-btn-enter-active,
+.scroll-btn-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.scroll-btn-enter-from,
+.scroll-btn-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

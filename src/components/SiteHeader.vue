@@ -1,5 +1,5 @@
 <template>
-  <header class="site-header" id="masthead">
+  <header class="site-header" :class="{ scrolled: isScrolled }" id="masthead">
     <div class="header-inner">
       <div class="site-branding">
         <router-link to="/" class="logo-link">
@@ -36,6 +36,7 @@
               @click="mobileMenuOpen = false"
             >
               {{ item.label }}
+              <svg class="external-icon" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M3.5 1.5v1h4.793L1.146 9.646l.708.708L9 3.207V8h1V1.5z"/></svg>
             </a>
           </li>
         </ul>
@@ -45,22 +46,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const mobileMenuOpen = ref(false)
+const isScrolled = ref(false)
 
 const menuItems = [
   { label: '首页', path: '/', external: false },
-  { label: '商业化服务', path: '/bussiness', external: false },
   { label: 'HybridCLR', path: '/hybridclr', external: false },
-  { label: 'LUBAN', path: 'https://www.datable.cn/docs/intro', external: true },
+  { label: 'LeanCLR', path: '/leanclr', external: false },
+  { label: 'Luban', path: '/luban', external: false },
+  { label: '商业化服务', path: '/bussiness', external: false },
 ]
 
 function isActive(path: string) {
   return route.path === path
 }
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 20
+}
+
+onMounted(() => window.addEventListener('scroll', handleScroll))
+onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 </script>
 
 <style scoped>
@@ -70,17 +80,27 @@ function isActive(path: string) {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.3);
-  min-height: 60px;
+  background: rgba(10, 15, 30, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.3s ease;
+}
+
+.site-header.scrolled {
+  background: rgba(10, 15, 30, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .header-inner {
-  max-width: 1920px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 35px;
+  padding: 0 40px;
+  height: 70px;
 }
 
 .site-branding .logo-link {
@@ -89,7 +109,7 @@ function isActive(path: string) {
 }
 
 .custom-logo {
-  max-width: 280px;
+  max-width: 240px;
   height: auto;
   transition: all 0.2s linear;
 }
@@ -103,7 +123,7 @@ function isActive(path: string) {
   display: flex;
   margin: 0;
   padding: 0;
-  gap: 0;
+  gap: 4px;
 }
 
 .nav-menu li {
@@ -114,21 +134,45 @@ function isActive(path: string) {
 .menu-link {
   display: flex;
   align-items: center;
-  color: #fafcfd;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  font-family: inherit;
+  font-family: var(--font-body);
   font-weight: 500;
-  font-size: 18px;
-  letter-spacing: 3px;
-  padding: 25px 25px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  padding: 8px 18px;
+  border-radius: 8px;
   transition: all 0.3s ease;
   white-space: nowrap;
+  position: relative;
 }
 
-.menu-link:hover,
+.menu-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .menu-link.active {
-  color: #6a41a6;
-  transform: scale(1.1);
+  color: #ffffff;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.menu-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 1px;
+}
+
+.external-icon {
+  opacity: 0.5;
+  margin-left: 2px;
 }
 
 .mobile-menu-toggle {
@@ -143,13 +187,13 @@ function isActive(path: string) {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 24px;
+  width: 22px;
 }
 
 .hamburger span {
   display: block;
   height: 2px;
-  background: #046bd2;
+  background: rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
   border-radius: 1px;
 }
@@ -172,7 +216,8 @@ function isActive(path: string) {
   }
 
   .header-inner {
-    padding: 10px 20px;
+    padding: 0 20px;
+    height: 60px;
   }
 
   .mobile-menu-toggle {
@@ -185,8 +230,11 @@ function isActive(path: string) {
     top: 100%;
     left: 0;
     right: 0;
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: rgba(10, 15, 30, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
   }
 
   .main-nav.open {
@@ -195,20 +243,25 @@ function isActive(path: string) {
 
   .nav-menu {
     flex-direction: column;
+    padding: 8px;
+    gap: 2px;
   }
 
   .menu-link {
-    color: #334155;
-    padding: 15px 20px;
-    letter-spacing: 1px;
-    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 16px;
+    font-size: 15px;
+    border-radius: 8px;
   }
 
   .menu-link:hover,
   .menu-link.active {
-    color: #045cb4;
-    background: #f9fafb;
-    transform: none;
+    color: #ffffff;
+    background: rgba(59, 130, 246, 0.15);
+  }
+
+  .menu-link.active::after {
+    display: none;
   }
 }
 
