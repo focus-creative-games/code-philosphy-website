@@ -74,8 +74,7 @@
         </div>
 
         <!-- Professional -->
-        <div class="pricing-card glass-card pricing-featured">
-          <div class="pricing-recommend">推荐</div>
+        <div class="pricing-card glass-card">
           <div class="pricing-header">
             <div class="pricing-icon">⚡</div>
             <h3 class="pricing-title">专业版</h3>
@@ -100,12 +99,13 @@
         </div>
 
         <!-- Flagship -->
-        <div class="pricing-card glass-card">
+        <div class="pricing-card glass-card pricing-featured">
+          <div class="pricing-recommend">推荐</div>
           <div class="pricing-header">
             <div class="pricing-icon">🚀</div>
             <h3 class="pricing-title">旗舰版</h3>
           </div>
-          <p class="pricing-desc">性能与原生基本持平，适合有严苛性能要求的项目</p>
+          <p class="pricing-desc">性能与原生基本持平，是面向严苛性能与安全需求项目的首选版本，深度依赖 HybridCLR 独有的 DHE 技术。</p>
           <p class="pricing-price">邮件咨询价格</p>
           <ul class="pricing-features">
             <li>解释执行</li>
@@ -119,7 +119,7 @@
             <li><a href="https://www.hybridclr.cn/docs/business/basicoptimization" target="_blank">标准解释性能优化</a></li>
             <li><a href="https://www.hybridclr.cn/docs/business/advancedoptimization" target="_blank">离线指令优化</a></li>
             <li class="feature-highlight"><a href="https://www.hybridclr.cn/docs/business/basicencryption" target="_blank">代码加固</a></li>
-            <li class="feature-highlight"><a href="https://www.hybridclr.cn/docs/business/differentialhybridexecution" target="_blank">DHE 技术</a></li>
+            <li class="feature-highlight feature-dhe"><a href="https://www.hybridclr.cn/docs/business/differentialhybridexecution" target="_blank">DHE 技术（Differential Hybrid Execution）</a></li>
             <li class="feature-highlight">两年技术支持</li>
             <li class="feature-highlight">提供全部源码</li>
           </ul>
@@ -152,6 +152,9 @@
           </ul>
         </div>
       </div>
+      <p class="pricing-note fade-in-up">
+        旗舰版基于 HybridCLR 独有的 <strong>DHE（Differential Hybrid Execution）</strong> 技术，是追求极致性能与安全的项目的首选方案。
+      </p>
     </section>
 
     <!-- Trial Rules -->
@@ -445,6 +448,18 @@
   line-height: 1.6;
   text-align: center;
   min-height: 44px;
+}
+
+.feature-dhe a {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.pricing-note {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--color-text-light);
+  text-align: center;
 }
 
 .pricing-price {
