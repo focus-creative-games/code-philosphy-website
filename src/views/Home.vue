@@ -52,14 +52,14 @@
                 <div class="product-card-top">
                   <span class="product-badge" :class="p.badgeClass">{{ p.badge }}</span>
                   <a
-                    v-if="p.stars"
+                    v-if="liveStars[p.id]"
                     class="product-stars"
                     :href="p.github || p.externalLink"
                     target="_blank"
                     rel="noopener"
                   >
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
-                    {{ p.stars }}
+                    {{ liveStars[p.id] }}
                   </a>
                 </div>
                 <h3 class="product-name">{{ p.name }}</h3>
@@ -123,6 +123,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useParticleCanvas } from '../composables/useParticleCanvas'
+import { useGithubStars } from '../composables/useGithubStars'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 useParticleCanvas(canvasRef)
@@ -136,6 +137,7 @@ interface ProductItem {
   tagline: string
   desc: string
   stars: string
+  repo: string
   detailLink?: string
   externalLink: string
   externalLabel: string
@@ -166,6 +168,7 @@ const productGroups: ProductGroup[] = [
         tagline: 'Unity 全平台原生 C# 热更方案',
         desc: '特性完整、零成本、高性能、低内存。扩充 il2cpp 为 AOT + Interpreter 混合运行时，原生支持动态加载程序集。已有数千商业项目接入，开创性的 DHE 技术让热更运行达到原生 AOT 水平。',
         stars: '8.0k',
+        repo: 'focus-creative-games/hybridclr',
         detailLink: '/hybridclr',
         externalLink: 'https://github.com/focus-creative-games/hybridclr',
         externalLabel: 'GitHub',
@@ -178,6 +181,7 @@ const productGroups: ProductGroup[] = [
         tagline: '面向生产的轻量跨平台 CLR',
         desc: '高 ECMA-335 兼容、易嵌入、强跨平台。可替换 IL2CPP 作为 Unity WebGL / 小游戏发布运行时，选择性 AOT 下代码可减少 70%–90%。标准 C++11 实现，Core 单线程版可裁剪至约 300KB。',
         stars: '663',
+        repo: 'focus-creative-games/leanclr',
         detailLink: '/leanclr',
         externalLink: 'https://doc.leanclr.com/',
         externalLabel: '官方文档',
@@ -199,6 +203,7 @@ const productGroups: ProductGroup[] = [
         tagline: '为 IL2CPP 极致优化的 Unity Lua 方案',
         desc: '零配置开箱即用，无需 per-type Wrap 白名单。C# 与 Lua 可任意互调，引用类型与 struct 默认 0 GC。Il2Cpp 实测显著优于 xLua / toLua / SLua，支持 Lua 5.1–5.5 与 LuaJIT。',
         stars: '226',
+        repo: 'focus-creative-games/zlua',
         externalLink: 'https://doc.zlua.cn',
         externalLabel: '官方文档',
         github: 'https://github.com/focus-creative-games/zlua',
@@ -211,6 +216,7 @@ const productGroups: ProductGroup[] = [
         tagline: '为 IL2CPP 极致优化的 Unity TypeScript 方案',
         desc: '由 QuickJS 驱动，设计与 ZLua 对齐。零 Wrap 白名单，完备的 C#↔JS 交互，官方 TypeScript 工作流。会用 ZLua，即可很快上手 ZenTS。',
         stars: '4',
+        repo: 'focus-creative-games/zen-ts',
         externalLink: 'https://zents.code-philosophy.com/',
         externalLabel: '官方文档',
         github: 'https://github.com/focus-creative-games/zen-ts',
@@ -223,6 +229,7 @@ const productGroups: ProductGroup[] = [
         tagline: '分层混合执行的现代 Lua 运行时',
         desc: '从零用 C++17 重写，支持 Lua 5.3+。提供字节码解释器、离线 AOT 编译与可选 tracing JIT，并非历史 LuaJIT 的衍生。',
         stars: '12',
+        repo: 'focus-creative-games/luatier',
         externalLink: 'https://github.com/focus-creative-games/luatier',
         externalLabel: 'GitHub',
       },
@@ -242,6 +249,7 @@ const productGroups: ProductGroup[] = [
         tagline: '强大、易用、优雅、稳定的游戏配置方案',
         desc: '增强的 Excel 格式，完备类型系统（含 OOP 继承），强大的数据校验，内置生成 C#、Java、Go、C++、Lua、TypeScript 等十余种语言代码。支持 Unity、UE、Godot 等主流引擎。',
         stars: '4.5k',
+        repo: 'focus-creative-games/luban',
         detailLink: '/luban',
         externalLink: 'https://www.datable.cn/',
         externalLabel: '文档站',
@@ -263,6 +271,7 @@ const productGroups: ProductGroup[] = [
         tagline: '开源 Unity 代码混淆与加固方案',
         desc: '深度集成 Unity 工作流，默认无需配置即可良好工作。支持符号/常量/控制流混淆与随机加密虚拟机，全面兼容 HybridCLR、xLua 等热更新方案，三分钟即可接入。',
         stars: '800',
+        repo: 'focus-creative-games/obfuz',
         externalLink: 'https://www.obfuz.com/',
         externalLabel: '文档站',
         github: 'https://github.com/focus-creative-games/obfuz',
@@ -270,6 +279,12 @@ const productGroups: ProductGroup[] = [
     ],
   },
 ]
+
+const allProducts = productGroups.flatMap((g) => g.products)
+const { stars: liveStars } = useGithubStars(
+  Object.fromEntries(allProducts.map((p) => [p.id, p.repo])),
+  Object.fromEntries(allProducts.map((p) => [p.id, p.stars])),
+)
 
 const logoRows = [
   [
