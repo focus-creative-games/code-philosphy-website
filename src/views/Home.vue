@@ -24,79 +24,76 @@
       </div>
     </section>
 
-    <!-- Product Showcase (Tab Switch) -->
-    <section class="showcase-section">
-      <div class="showcase-glow" :class="'showcase-glow-' + activeProduct"></div>
-      <div class="showcase-inner fade-in-up">
-        <h2 class="showcase-heading">核心产品</h2>
-        <!-- Tabs -->
-        <div class="showcase-tabs">
-          <button
-            v-for="p in products"
-            :key="p.id"
-            class="showcase-tab"
-            :class="{ active: activeProduct === p.id }"
-            @click="switchProduct(p.id)"
+    <!-- Product Catalog -->
+    <section class="products-section">
+      <div class="products-glow"></div>
+      <div class="products-inner fade-in-up">
+        <h2 class="products-heading">核心产品</h2>
+        <p class="products-intro">覆盖 C# 运行时、脚本方案、游戏配置与代码安全</p>
+
+        <div class="product-groups">
+          <div
+            v-for="group in productGroups"
+            :key="group.id"
+            class="product-group"
+            :class="'group-' + group.id"
           >
-            <span class="tab-name">{{ p.name }}</span>
-            <span class="tab-tagline">{{ p.tagline }}</span>
-          </button>
-        </div>
-
-        <!-- Product Panel -->
-        <div class="showcase-panel">
-          <TransitionGroup name="panel">
-            <div
-              v-for="p in products"
-              v-show="activeProduct === p.id"
-              :key="p.id"
-              class="panel-content"
-            >
-              <div class="panel-left">
-                <div class="panel-badge" :class="p.badgeClass">{{ p.badge }}</div>
-                <h3 class="panel-title gradient-text">{{ p.name }}</h3>
-                <p class="panel-tagline">{{ p.tagline }}</p>
-                <p class="panel-desc">{{ p.desc }}</p>
-                <div class="panel-buttons">
-                  <router-link :to="p.detailLink" class="btn-glow btn-glow-primary">了解更多</router-link>
-                  <a :href="p.externalLink" target="_blank" class="btn-glow btn-glow-outline">{{ p.externalLabel }}</a>
-                </div>
-              </div>
-              <div class="panel-right">
-                <div class="stat-grid">
-                  <div
-                    v-for="(s, si) in p.stats"
-                    :key="si"
-                    class="stat-card glass-card"
-                  >
-                    <div class="stat-value">{{ s.value }}</div>
-                    <div class="stat-label">{{ s.label }}</div>
-                  </div>
-                </div>
-              </div>
+            <div class="group-header">
+              <span class="group-label">{{ group.title }}</span>
+              <span class="group-subtitle">{{ group.subtitle }}</span>
             </div>
-          </TransitionGroup>
+            <div class="product-grid" :class="'cols-' + group.cols">
+              <article
+                v-for="p in group.products"
+                :key="p.id"
+                class="product-card glass-card"
+                :class="{ featured: p.featured }"
+              >
+                <div class="product-card-top">
+                  <span class="product-badge" :class="p.badgeClass">{{ p.badge }}</span>
+                  <a
+                    v-if="p.stars"
+                    class="product-stars"
+                    :href="p.github || p.externalLink"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+                    {{ p.stars }}
+                  </a>
+                </div>
+                <h3 class="product-name">{{ p.name }}</h3>
+                <p class="product-tagline">{{ p.tagline }}</p>
+                <p class="product-desc">{{ p.desc }}</p>
+                <div class="product-actions">
+                  <router-link
+                    v-if="p.detailLink"
+                    :to="p.detailLink"
+                    class="btn-glow btn-glow-primary"
+                  >了解更多</router-link>
+                  <a
+                    :href="p.externalLink"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-glow"
+                    :class="p.detailLink ? 'btn-glow-outline' : 'btn-glow-primary'"
+                  >{{ p.externalLabel }}</a>
+                  <a
+                    v-if="p.github && !p.detailLink"
+                    :href="p.github"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-glow btn-glow-outline"
+                  >GitHub</a>
+                </div>
+              </article>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <!-- More Products -->
-    <section class="more-products-section fade-in-up">
-      <h2 class="more-title">更多产品</h2>
-      <div class="more-grid">
-        <a href="https://www.obfuz.com/" target="_blank" class="more-card glass-card">
-          <h3>Obfuz</h3>
-          <p>开源、强大、易用的 Unity 代码混淆与加固方案，深度集成 Unity 工作流，3 分钟快速接入。</p>
-          <div class="more-card-links">
-            <span class="more-link">文档站 &rarr;</span>
-          </div>
-        </a>
-        <a href="https://github.com/focus-creative-games" target="_blank" class="more-card glass-card">
-          <h3>探索全部项目</h3>
-          <p>访问我们的 GitHub 主页，查看所有开源项目和技术方案。</p>
-          <div class="more-card-links">
-            <span class="more-link">GitHub &rarr;</span>
-          </div>
+        <a href="https://github.com/focus-creative-games" target="_blank" rel="noopener" class="all-projects-link">
+          在 GitHub 上查看全部开源项目
+          <span aria-hidden="true">&rarr;</span>
         </a>
       </div>
     </section>
@@ -130,78 +127,149 @@ import { useParticleCanvas } from '../composables/useParticleCanvas'
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 useParticleCanvas(canvasRef)
 
-// Product showcase data
-const activeProduct = ref('hybridclr')
-let autoTimer: ReturnType<typeof setInterval> | null = null
+interface ProductItem {
+  id: string
+  name: string
+  badge: string
+  badgeClass: string
+  featured?: boolean
+  tagline: string
+  desc: string
+  stars: string
+  detailLink?: string
+  externalLink: string
+  externalLabel: string
+  github?: string
+}
 
-const products = [
+interface ProductGroup {
+  id: string
+  title: string
+  subtitle: string
+  cols: 1 | 2 | 3
+  products: ProductItem[]
+}
+
+const productGroups: ProductGroup[] = [
   {
-    id: 'hybridclr',
-    name: 'HybridCLR',
-    badge: '核心产品',
-    badgeClass: 'badge-blue',
-    tagline: 'Unity 全平台原生 C# 热更方案',
-    desc: '特性完整、零成本、高性能、低内存。已有数千商业项目接入，百款游戏双端上线。开创性的 DHE 技术让热更运行达到原生 AOT 水平。',
-    detailLink: '/hybridclr',
-    externalLink: 'https://github.com/focus-creative-games/hybridclr',
-    externalLabel: 'GitHub',
-    stats: [
-      { value: '7700+', label: 'GitHub Stars' },
-      { value: '千款', label: '商业项目接入' },
-      { value: 'MIT', label: '开源协议' },
-      { value: '2700+', label: '测试用例通过' },
+    id: 'runtime',
+    title: 'C# 运行时',
+    subtitle: '原生 C# 热更新与轻量 CLR',
+    cols: 2,
+    products: [
+      {
+        id: 'hybridclr',
+        name: 'HybridCLR',
+        badge: '核心产品',
+        badgeClass: 'badge-blue',
+        featured: true,
+        tagline: 'Unity 全平台原生 C# 热更方案',
+        desc: '特性完整、零成本、高性能、低内存。扩充 il2cpp 为 AOT + Interpreter 混合运行时，原生支持动态加载程序集。已有数千商业项目接入，开创性的 DHE 技术让热更运行达到原生 AOT 水平。',
+        stars: '8.0k',
+        detailLink: '/hybridclr',
+        externalLink: 'https://github.com/focus-creative-games/hybridclr',
+        externalLabel: 'GitHub',
+      },
+      {
+        id: 'leanclr',
+        name: 'LeanCLR',
+        badge: '全新产品',
+        badgeClass: 'badge-purple',
+        tagline: '面向生产的轻量跨平台 CLR',
+        desc: '高 ECMA-335 兼容、易嵌入、强跨平台。可替换 IL2CPP 作为 Unity WebGL / 小游戏发布运行时，选择性 AOT 下代码可减少 70%–90%。标准 C++11 实现，Core 单线程版可裁剪至约 300KB。',
+        stars: '663',
+        detailLink: '/leanclr',
+        externalLink: 'https://doc.leanclr.com/',
+        externalLabel: '官方文档',
+        github: 'https://github.com/focus-creative-games/leanclr',
+      },
     ],
   },
   {
-    id: 'leanclr',
-    name: 'LeanCLR',
-    badge: '全新产品',
-    badgeClass: 'badge-purple',
-    tagline: '轻量级跨平台 CLR 运行时',
-    desc: '极致精简、轻松嵌入、低内存占用。单线程版 X64/WebAssembly 仅 600KB，可裁剪至 300KB。面向移动/H5/小游戏等资源受限平台。',
-    detailLink: '/leanclr',
-    externalLink: 'https://github.com/focus-creative-games/leanclr',
-    externalLabel: 'GitHub',
-    stats: [
-      { value: '600KB', label: '极致精简体积' },
-      { value: 'C++17', label: '纯净零依赖' },
-      { value: 'AOT+Interpreter', label: '混合执行模式' },
-      { value: '全平台', label: '移动/H5/小游戏' },
+    id: 'scripting',
+    title: '脚本方案',
+    subtitle: '面向 Unity 的现代 Lua / TypeScript，以及下一代 Lua 运行时',
+    cols: 3,
+    products: [
+      {
+        id: 'zlua',
+        name: 'ZLua',
+        badge: 'Lua',
+        badgeClass: 'badge-cyan',
+        tagline: '为 IL2CPP 极致优化的 Unity Lua 方案',
+        desc: '零配置开箱即用，无需 per-type Wrap 白名单。C# 与 Lua 可任意互调，引用类型与 struct 默认 0 GC。Il2Cpp 实测显著优于 xLua / toLua / SLua，支持 Lua 5.1–5.5 与 LuaJIT。',
+        stars: '226',
+        externalLink: 'https://doc.zlua.cn',
+        externalLabel: '官方文档',
+        github: 'https://github.com/focus-creative-games/zlua',
+      },
+      {
+        id: 'zents',
+        name: 'ZenTS',
+        badge: 'TypeScript',
+        badgeClass: 'badge-cyan',
+        tagline: '为 IL2CPP 极致优化的 Unity TypeScript 方案',
+        desc: '由 QuickJS 驱动，设计与 ZLua 对齐。零 Wrap 白名单，完备的 C#↔JS 交互，官方 TypeScript 工作流。会用 ZLua，即可很快上手 ZenTS。',
+        stars: '4',
+        externalLink: 'https://zents.code-philosophy.com/',
+        externalLabel: '官方文档',
+        github: 'https://github.com/focus-creative-games/zen-ts',
+      },
+      {
+        id: 'luatier',
+        name: 'LuaTier',
+        badge: '研发中',
+        badgeClass: 'badge-orange',
+        tagline: '分层混合执行的现代 Lua 运行时',
+        desc: '从零用 C++17 重写，支持 Lua 5.3+。提供字节码解释器、离线 AOT 编译与可选 tracing JIT，并非历史 LuaJIT 的衍生。',
+        stars: '12',
+        externalLink: 'https://github.com/focus-creative-games/luatier',
+        externalLabel: 'GitHub',
+      },
     ],
   },
   {
-    id: 'luban',
-    name: 'Luban',
-    badge: '热门项目',
-    badgeClass: 'badge-green',
-    tagline: '强大灵活的游戏配置解决方案',
-    desc: '增强的 Excel 格式，完整的类型系统，强大的数据校验，支持十余种编程语言代码生成。从小型到超大型项目的全覆盖配置工作流。',
-    detailLink: '/luban',
-    externalLink: 'https://www.datable.cn/',
-    externalLabel: '文档站',
-    stats: [
-      { value: '4300+', label: 'GitHub Stars' },
-      { value: '13+', label: '语言代码生成' },
-      { value: 'MIT', label: '开源协议' },
-      { value: '全引擎', label: 'Unity/UE/Godot' },
+    id: 'config',
+    title: '游戏配置',
+    subtitle: '从小型到超大型项目的配置工作流',
+    cols: 1,
+    products: [
+      {
+        id: 'luban',
+        name: 'Luban',
+        badge: '热门项目',
+        badgeClass: 'badge-green',
+        tagline: '强大、易用、优雅、稳定的游戏配置方案',
+        desc: '增强的 Excel 格式，完备类型系统（含 OOP 继承），强大的数据校验，内置生成 C#、Java、Go、C++、Lua、TypeScript 等十余种语言代码。支持 Unity、UE、Godot 等主流引擎。',
+        stars: '4.5k',
+        detailLink: '/luban',
+        externalLink: 'https://www.datable.cn/',
+        externalLabel: '文档站',
+        github: 'https://github.com/focus-creative-games/luban',
+      },
+    ],
+  },
+  {
+    id: 'security',
+    title: '代码安全',
+    subtitle: 'Unity 代码混淆与加固',
+    cols: 1,
+    products: [
+      {
+        id: 'obfuz',
+        name: 'Obfuz',
+        badge: '安全加固',
+        badgeClass: 'badge-rose',
+        tagline: '开源 Unity 代码混淆与加固方案',
+        desc: '深度集成 Unity 工作流，默认无需配置即可良好工作。支持符号/常量/控制流混淆与随机加密虚拟机，全面兼容 HybridCLR、xLua 等热更新方案，三分钟即可接入。',
+        stars: '800',
+        externalLink: 'https://www.obfuz.com/',
+        externalLabel: '文档站',
+        github: 'https://github.com/focus-creative-games/obfuz',
+      },
     ],
   },
 ]
-
-function switchProduct(id: string) {
-  activeProduct.value = id
-  resetAutoSwitch()
-}
-
-function resetAutoSwitch() {
-  if (autoTimer) clearInterval(autoTimer)
-  autoTimer = setInterval(() => {
-    const idx = products.findIndex((p) => p.id === activeProduct.value)
-    activeProduct.value = products[(idx + 1) % products.length].id
-  }, 6000)
-}
-
-resetAutoSwitch()
 
 const logoRows = [
   [
@@ -339,182 +407,208 @@ const logoRows = [
 .scroll-arrow { width: 24px; height: 24px; border-right: 2px solid rgba(255,255,255,0.3); border-bottom: 2px solid rgba(255,255,255,0.3); transform: rotate(45deg); animation: scrollBounce 2s infinite; }
 @keyframes scrollBounce { 0%,100% { transform: rotate(45deg) translateY(0); opacity: 0.3; } 50% { transform: rotate(45deg) translateY(8px); opacity: 0.8; } }
 
-/* ═══ Product Showcase ═══ */
-.showcase-section {
+/* ═══ Product Catalog ═══ */
+.products-section {
   position: relative;
-  min-height: 80vh;
   background: var(--color-bg-alt);
   overflow: hidden;
   padding: 100px 0 80px;
 }
 
-.showcase-glow {
+.products-glow {
   position: absolute;
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   border-radius: 50%;
   filter: blur(120px);
   pointer-events: none;
-  top: 50%;
+  top: 120px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  transition: background 0.8s ease;
+  transform: translateX(-50%);
+  background: rgba(59, 130, 246, 0.07);
 }
 
-.showcase-glow-hybridclr { background: rgba(59, 130, 246, 0.08); }
-.showcase-glow-leanclr { background: rgba(139, 92, 246, 0.08); }
-.showcase-glow-luban { background: rgba(16, 185, 129, 0.08); }
-
-.showcase-inner {
+.products-inner {
   position: relative;
   z-index: 1;
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 40px;
 }
 
-.showcase-heading {
+.products-heading {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 3px;
   color: var(--color-text-light);
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 12px;
 }
 
-/* Tabs */
-.showcase-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
+.products-intro {
+  text-align: center;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.45);
   margin-bottom: 56px;
 }
 
-.showcase-tab {
+.product-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px 24px;
+}
+
+.group-runtime,
+.group-scripting {
+  grid-column: 1 / -1;
+}
+
+.group-header {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 16px 32px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: transparent;
-  color: rgba(255, 255, 255, 0.45);
-  cursor: pointer;
-  transition: all 0.35s ease;
-  min-width: 180px;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
 }
 
-.showcase-tab:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.showcase-tab.active {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(59, 130, 246, 0.25);
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.08);
-}
-
-.tab-name {
-  font-size: 18px;
+.group-label {
+  font-size: 15px;
   font-weight: 700;
+  letter-spacing: 1px;
+  color: #f1f5f9;
   font-family: var(--font-heading);
 }
 
-.tab-tagline {
-  font-size: 12px;
-  font-weight: 400;
-  opacity: 0.6;
+.group-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
-/* Panel */
-.showcase-panel {
-  position: relative;
-  min-height: 340px;
-}
-
-.panel-content {
+.product-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
+  gap: 20px;
 }
 
-.panel-badge {
+.product-grid.cols-2,
+.product-grid.cols-1 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.product-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.group-config .product-grid,
+.group-security .product-grid {
+  grid-template-columns: 1fr;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 26px 24px;
+  transition: all 0.3s ease;
+  min-height: 100%;
+}
+
+.product-card:hover {
+  border-color: rgba(59, 130, 246, 0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
+}
+
+.product-card.featured {
+  border-color: rgba(59, 130, 246, 0.28);
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.08), 0 8px 32px rgba(59, 130, 246, 0.08);
+}
+
+.product-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.product-badge {
   display: inline-block;
-  padding: 4px 14px;
+  padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 1px;
-  margin-bottom: 20px;
+  letter-spacing: 0.5px;
 }
 
 .badge-blue { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.2); }
 .badge-purple { background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.2); }
 .badge-green { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+.badge-cyan { background: rgba(6, 182, 212, 0.12); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.2); }
+.badge-orange { background: rgba(249, 115, 22, 0.12); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.2); }
+.badge-rose { background: rgba(244, 63, 94, 0.12); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.2); }
 
-.panel-title { font-size: 44px; font-weight: 800; margin-bottom: 12px; }
-.panel-tagline { font-size: 20px; color: rgba(255,255,255,0.65); margin-bottom: 16px; font-weight: 500; }
-.panel-desc { font-size: 15px; color: rgba(255,255,255,0.45); line-height: 1.8; margin-bottom: 32px; }
-.panel-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
-
-/* Stats grid */
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+.product-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-family: var(--font-heading);
 }
 
-.stat-card {
-  padding: 28px 20px;
+.product-stars:hover {
+  color: #fbbf24;
+}
+
+.product-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.product-tagline {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.product-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.75;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.product-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.product-actions .btn-glow {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.all-projects-link {
+  display: block;
   text-align: center;
-  transition: all 0.3s ease;
+  margin-top: 48px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-.stat-card:hover {
-  border-color: rgba(59, 130, 246, 0.2);
-  transform: translateY(-2px);
+.all-projects-link:hover {
+  color: #93c5fd;
 }
-
-.stat-value { font-size: 28px; font-weight: 800; color: #ffffff; margin-bottom: 6px; font-family: var(--font-heading); }
-.stat-label { font-size: 13px; color: rgba(255,255,255,0.45); }
-
-/* Panel transition */
-.panel-enter-active,
-.panel-leave-active {
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.panel-enter-from {
-  opacity: 0;
-  transform: translateY(15px);
-}
-
-.panel-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.panel-leave-active {
-  position: absolute;
-  width: 100%;
-}
-
-/* ═══ More Products ═══ */
-.more-products-section { padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
-.more-title { font-size: 28px; font-weight: 700; color: var(--color-heading); margin-bottom: 32px; text-align: center; }
-.more-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-.more-card { padding: 32px; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
-.more-card:hover { border-color: rgba(59,130,246,0.2); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(59,130,246,0.1); }
-.more-card h3 { font-size: 22px; font-weight: 700; color: #f1f5f9; margin-bottom: 10px; }
-.more-card p { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 16px; }
-.more-card-links { display: flex; gap: 16px; }
-.more-link { font-size: 14px; font-weight: 600; color: var(--color-primary); }
 
 /* ═══ Users Section ═══ */
 .users-section { position: relative; background: #f8fafc; padding: 0 0 80px; }
@@ -534,34 +628,19 @@ const logoRows = [
 
 /* ═══ Responsive ═══ */
 @media (max-width: 921px) {
-  .showcase-section { padding: 80px 0 60px; }
-
-  .showcase-tabs { flex-direction: column; align-items: center; }
-  .showcase-tab { min-width: 260px; }
-
-  .panel-content {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .panel-title { font-size: 36px; }
-
-  .more-grid { grid-template-columns: 1fr; }
+  .products-section { padding: 80px 0 60px; }
+  .products-inner { padding: 0 24px; }
+  .product-groups { grid-template-columns: 1fr; gap: 40px; }
+  .product-grid.cols-2,
+  .product-grid.cols-3 { grid-template-columns: 1fr; }
   .logo-item { width: 100px; height: 56px; padding: 8px; }
 }
 
 @media (max-width: 544px) {
   .hero-section { min-height: 90vh; }
-
-  .showcase-inner { padding: 0 20px; }
-  .showcase-tab { min-width: auto; width: 100%; padding: 12px 20px; }
-  .tab-name { font-size: 16px; }
-  .panel-title { font-size: 30px; }
-  .stat-grid { gap: 10px; }
-  .stat-card { padding: 20px 12px; }
-  .stat-value { font-size: 22px; }
-
-  .more-products-section { padding: 60px 20px; }
+  .products-inner { padding: 0 20px; }
+  .product-name { font-size: 22px; }
+  .product-card { padding: 22px 20px 20px; }
   .logo-item { width: 80px; height: 48px; }
   .users-content { padding: 30px 16px 0; }
   .section-title { font-size: 28px; }

@@ -5,36 +5,48 @@
       <div class="page-hero-glow glow-1"></div>
       <div class="page-hero-glow glow-2"></div>
       <div class="page-hero-content fade-in-up">
-        <div class="hero-badge">下一代 CLR 运行时</div>
+        <div class="hero-badge">Unity 发布期 CLR 运行时</div>
         <h1 class="hero-title gradient-text">LeanCLR</h1>
-        <p class="hero-subtitle">轻量级跨平台 CLR 运行时</p>
-        <p class="hero-desc">极致精简、轻松嵌入、低内存占用的全平台 .NET 运行时</p>
+        <p class="hero-subtitle">Write C#, Run Anywhere</p>
+        <p class="hero-desc">面向生产发布的轻量 CLR：替换 IL2CPP，显著缩小 wasm 与内存占用，支持选择性 AOT、延迟加载与热更新</p>
 
         <div class="hero-stats">
           <div class="stat-card glass-card">
-            <div class="stat-number">600KB</div>
-            <div class="stat-label">超精简体积</div>
+            <div class="stat-number">70–90%</div>
+            <div class="stat-label">AOT 代码可减少</div>
           </div>
           <div class="stat-card glass-card">
-            <div class="stat-number">C++17</div>
-            <div class="stat-label">纯净零依赖</div>
+            <div class="stat-number">20–35%</div>
+            <div class="stat-label">虚拟机内存节省</div>
           </div>
           <div class="stat-card glass-card">
             <div class="stat-number">AOT+</div>
-            <div class="stat-label">混合执行模式</div>
+            <div class="stat-label">解释器混合执行</div>
           </div>
           <div class="stat-card glass-card">
-            <div class="stat-number">全平台</div>
-            <div class="stat-label">移动/H5/小游戏</div>
+            <div class="stat-number">WebGL</div>
+            <div class="stat-label">小游戏 / 团结引擎</div>
           </div>
         </div>
 
         <div class="hero-cta">
-          <a href="https://github.com/focus-creative-games/leanclr" target="_blank" class="btn-glow btn-glow-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            GitHub
-          </a>
-          <a href="https://github.com/focus-creative-games/leanclr-demo" target="_blank" class="btn-glow btn-glow-outline">查看 Demo</a>
+          <a href="https://doc.leanclr.com/" target="_blank" rel="noopener" class="btn-glow btn-glow-primary">官方文档</a>
+          <a href="https://github.com/focus-creative-games/leanclr-unity" target="_blank" rel="noopener" class="btn-glow btn-glow-outline">Unity 插件</a>
+          <a href="https://github.com/focus-creative-games/leanclr" target="_blank" rel="noopener" class="btn-glow btn-glow-outline">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- vs IL2CPP -->
+    <section class="advantage-section">
+      <div class="section-inner fade-in-up">
+        <h2 class="section-heading">相对 IL2CPP 的优势</h2>
+        <p class="section-desc">在 Unity WebGL / 小游戏发布场景，配合 <code>aot.xml</code> / PGO 选择性 AOT，典型收益如下。</p>
+        <div class="advantage-grid">
+          <div class="advantage-card glass-card" v-for="item in il2cppAdvantages" :key="item.title">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.desc }}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -43,33 +55,33 @@
     <section class="why-section">
       <div class="section-inner fade-in-up">
         <h2 class="section-heading">为什么选择 LeanCLR？</h2>
-        <p class="section-desc">现有 CLR 实现在资源受限平台上存在各种不足，LeanCLR 应运而生。</p>
+        <p class="section-desc">在「将 C# 嵌入宿主并发布到多平台」场景下，现有方案各有局限，LeanCLR 专注<strong>发布期后端替换</strong>与包体优化。</p>
 
         <div class="compare-grid">
           <div class="compare-card glass-card">
             <h3>CoreCLR / Mono</h3>
             <ul class="issue-list">
-              <li>产物体积过大（数 MB 至数十 MB）</li>
-              <li>不适合资源受限的小游戏平台</li>
-              <li>代码庞大，难以修改和移植</li>
+              <li>体积与依赖大，嵌入与裁剪成本高</li>
+              <li>不适合小游戏等严苛包体场景</li>
+              <li>移植到新平台工程复杂</li>
             </ul>
           </div>
           <div class="compare-card glass-card">
             <h3>IL2CPP</h3>
             <ul class="issue-list">
-              <li>闭源，仅支持 AOT 模式</li>
-              <li>ECMA-335 规范兼容性有限</li>
-              <li>不支持运行时动态加载程序集</li>
+              <li>闭源，与 Unity 工具链强绑定</li>
+              <li>全量 AOT 导致 wasm 与内存偏大</li>
+              <li>ECMA-335 覆盖与灵活性有限</li>
             </ul>
           </div>
           <div class="compare-card compare-card-highlight glass-card">
             <h3 class="gradient-text">LeanCLR</h3>
             <ul class="advantage-list">
-              <li><span class="check-icon">&#10003;</span> 极致精简 — 600KB，可裁剪至 300KB</li>
-              <li><span class="check-icon">&#10003;</span> 纯 C++17，零平台依赖</li>
-              <li><span class="check-icon">&#10003;</span> AOT + 解释器混合执行</li>
-              <li><span class="check-icon">&#10003;</span> 高 ECMA-335 兼容性</li>
-              <li><span class="check-icon">&#10003;</span> 简洁 CMake 构建，清晰 CLR API</li>
+              <li><span class="check-icon">&#10003;</span> 标准 C++11，零外部依赖，易嵌入</li>
+              <li><span class="check-icon">&#10003;</span> AOT + 解释器，选择性编译热点</li>
+              <li><span class="check-icon">&#10003;</span> 高 ECMA-335 兼容，Unity BCL 对齐</li>
+              <li><span class="check-icon">&#10003;</span> 准确式 Mark-Sweep GC，更快回收</li>
+              <li><span class="check-icon">&#10003;</span> 延迟加载与热更新程序集支持</li>
             </ul>
           </div>
         </div>
@@ -82,25 +94,25 @@
         <h2 class="section-heading">版本规划</h2>
         <div class="version-grid">
           <div class="version-card glass-card">
-            <div class="version-status status-done">已完成</div>
-            <h3>Core 版</h3>
-            <p class="version-desc">单线程、极致体积、零平台依赖、协作式精确 GC</p>
+            <div class="version-status status-done">当前对外</div>
+            <h3>Standard 版</h3>
+            <p class="version-desc">当前发布版本（单线程）；完整 BCL icall 持续完善，未来将支持多线程</p>
             <ul class="version-features">
-              <li>适用于移动端、WebAssembly、嵌入式/IoT</li>
-              <li>单指针大小的紧凑对象头</li>
-              <li>函数级 AOT 粒度</li>
-              <li>双解释器架构（IL 冷路径 + IR 热函数）</li>
+              <li>Unity WebGL / 小游戏生产可用</li>
+              <li>准确式 Mark-Sweep 全量 GC</li>
+              <li>LeanAOT、pgo2aot、延迟加载与热更新</li>
+              <li>与 Unity IL2CPP BCL 高度兼容</li>
             </ul>
           </div>
           <div class="version-card glass-card">
-            <div class="version-status status-planned">计划中</div>
-            <h3>Standard 版</h3>
-            <p class="version-desc">多线程、保守式 GC、完整平台 icall 支持</p>
+            <div class="version-status status-planned">规划中</div>
+            <h3>Core 版</h3>
+            <p class="version-desc">从 Standard 裁剪：纯 C++11、单线程、无平台相关代码，极致体积</p>
             <ul class="version-features">
-              <li>适用于桌面应用和重度移动游戏</li>
-              <li>完整 System.IO、System.Net 等</li>
-              <li>多线程及并发支持</li>
-              <li>更高的框架兼容性</li>
+              <li>适用于嵌入式与任意 C++11 平台</li>
+              <li>可作为轻量脚本引擎嵌入</li>
+              <li>主动式精确全量 GC（更精简）</li>
+              <li>尚未单独发布</li>
             </ul>
           </div>
         </div>
@@ -110,49 +122,38 @@
     <!-- Platform Support -->
     <section class="platform-section">
       <div class="section-inner fade-in-up">
-        <h2 class="section-heading">平台支持</h2>
+        <h2 class="section-heading">引擎与平台</h2>
         <div class="platform-table glass-card">
           <div class="pt-row pt-header">
-            <div class="pt-cell">平台</div>
+            <div class="pt-cell">平台 / 引擎</div>
             <div class="pt-cell">状态</div>
             <div class="pt-cell">说明</div>
           </div>
-          <div class="pt-row">
-            <div class="pt-cell"><strong>微信小游戏/小程序</strong></div>
-            <div class="pt-cell"><span class="status-tag tag-partial">部分支持</span></div>
-            <div class="pt-cell">SDK 已发布</div>
-          </div>
-          <div class="pt-row">
-            <div class="pt-cell"><strong>Unity/团结 WebGL 及小游戏</strong></div>
-            <div class="pt-cell"><span class="status-tag tag-dev">开发中</span></div>
-            <div class="pt-cell">预计 2026 年 3 月上线</div>
-          </div>
-          <div class="pt-row">
-            <div class="pt-cell"><strong>Unreal Engine (全平台)</strong></div>
-            <div class="pt-cell"><span class="status-tag tag-dev">开发中</span></div>
-            <div class="pt-cell">时间待定</div>
-          </div>
-          <div class="pt-row">
-            <div class="pt-cell"><strong>Godot (全平台)</strong></div>
-            <div class="pt-cell"><span class="status-tag tag-dev">开发中</span></div>
-            <div class="pt-cell">时间待定</div>
+          <div class="pt-row" v-for="row in platformRows" :key="row.name">
+            <div class="pt-cell"><strong>{{ row.name }}</strong></div>
+            <div class="pt-cell"><span class="status-tag" :class="row.tagClass">{{ row.status }}</span></div>
+            <div class="pt-cell">{{ row.note }}</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Dev Progress -->
-    <section class="progress-section">
+    <!-- Ecosystem -->
+    <section class="ecosystem-section">
       <div class="section-inner fade-in-up">
-        <h2 class="section-heading">开发进度</h2>
-        <div class="progress-grid">
-          <div class="progress-item" v-for="item in progressItems" :key="item.name">
-            <div class="progress-name">{{ item.name }}</div>
-            <div class="progress-bar">
-              <div class="progress-fill" :style="{ width: item.percent + '%' }" :class="item.status"></div>
-            </div>
-            <div class="progress-label" :class="item.status">{{ item.label }}</div>
-          </div>
+        <h2 class="section-heading">相关仓库</h2>
+        <div class="eco-grid">
+          <a
+            v-for="repo in repos"
+            :key="repo.url"
+            :href="repo.url"
+            target="_blank"
+            rel="noopener"
+            class="eco-card glass-card"
+          >
+            <h3>{{ repo.name }}</h3>
+            <p>{{ repo.desc }}</p>
+          </a>
         </div>
       </div>
     </section>
@@ -161,30 +162,72 @@
     <section class="cta-section">
       <div class="section-inner fade-in-up" style="text-align: center;">
         <h2 class="section-heading">开始使用 LeanCLR</h2>
-        <p class="section-desc">探索 LeanCLR 的更多能力，加入我们的开发者社区。</p>
+        <p class="section-desc">阅读文档、安装 Unity 插件，或加入开发者社区。</p>
         <div class="cta-buttons">
-          <a href="https://github.com/focus-creative-games/leanclr" target="_blank" class="btn-glow btn-glow-primary">GitHub 仓库</a>
-          <a href="https://github.com/focus-creative-games/leanclr-demo" target="_blank" class="btn-glow btn-glow-outline">查看 Demo</a>
+          <a href="https://doc.leanclr.com/docs/ecosystem/unity/install" target="_blank" rel="noopener" class="btn-glow btn-glow-primary">Unity 安装指南</a>
+          <a href="https://doc.leanclr.com/" target="_blank" rel="noopener" class="btn-glow btn-glow-outline">完整文档</a>
+          <a href="https://github.com/focus-creative-games/leanclr-unity-demo" target="_blank" rel="noopener" class="btn-glow btn-glow-outline">示例工程</a>
           <a href="mailto:leanclr@code-philosophy.com" class="btn-glow btn-glow-outline">联系我们</a>
         </div>
+        <p class="cta-contact">Discord · QQ 群 1047250380</p>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-const progressItems = [
-  { name: '元数据解析', percent: 100, label: '已完成', status: 'done' },
-  { name: '类型系统', percent: 100, label: '已完成', status: 'done' },
-  { name: 'IR 解释器', percent: 100, label: '已完成', status: 'done' },
-  { name: '异常处理', percent: 100, label: '已完成', status: 'done' },
-  { name: '反射', percent: 100, label: '已完成', status: 'done' },
-  { name: '委托', percent: 100, label: '已完成', status: 'done' },
-  { name: 'Internal Calls (Core)', percent: 100, label: '已完成', status: 'done' },
-  { name: 'P/Invoke', percent: 100, label: '已完成', status: 'done' },
-  { name: 'GC', percent: 60, label: '开发中', status: 'dev' },
-  { name: 'AOT 编译器', percent: 40, label: '开发中', status: 'dev' },
-  { name: '多线程', percent: 10, label: '计划中', status: 'planned' },
+const il2cppAdvantages = [
+  {
+    title: 'AOT 代码体积',
+    desc: '选择性 AOT 下，托管代码编译产生的原生 AOT 代码可减少约 70%–90%，包体优化极其显著，整体性能影响可控。',
+  },
+  {
+    title: '运行时内存',
+    desc: '虚拟机内存约减少 20%–35%，托管堆占用亦有少量下降，更适合内存受限的小游戏设备。',
+  },
+  {
+    title: '大型项目',
+    desc: '支持延迟加载与热更新程序集，在符合首包要求的前提下，可承载数十 MB 级托管逻辑。',
+  },
+  {
+    title: '垃圾回收',
+    desc: '准确式 Mark-Sweep GC，回收效率更高，GC 停顿更短、更快。',
+  },
+]
+
+const platformRows = [
+  {
+    name: 'Unity / 团结 WebGL 及小游戏',
+    status: '已完成',
+    tagClass: 'tag-done',
+    note: 'leanclr-unity 发布时自动替换 IL2CPP',
+  },
+  {
+    name: 'Godot（全平台）',
+    status: '开发中',
+    tagClass: 'tag-dev',
+    note: 'leanclr-godot 占位仓库',
+  },
+  {
+    name: 'Unreal Engine（全平台）',
+    status: '开发中',
+    tagClass: 'tag-dev',
+    note: 'leanclr-unreal 占位仓库',
+  },
+  {
+    name: 'Cocos Engine',
+    status: '开发中',
+    tagClass: 'tag-dev',
+    note: 'leanclr-cocos 占位仓库',
+  },
+]
+
+const repos = [
+  { name: 'leanclr', desc: '运行时与 LeanAOT 工具链源码', url: 'https://github.com/focus-creative-games/leanclr' },
+  { name: 'leanclr-unity', desc: 'Unity 集成包 com.code-philosophy.leanclr', url: 'https://github.com/focus-creative-games/leanclr-unity' },
+  { name: 'leanclr-doc', desc: '文档站 doc.leanclr.com', url: 'https://github.com/focus-creative-games/leanclr-doc' },
+  { name: 'leanclr-demo', desc: 'Win64 / H5 独立嵌入示例', url: 'https://github.com/focus-creative-games/leanclr-demo' },
+  { name: 'hybridclr', desc: 'Unity 全平台热更新（定位互补）', url: 'https://github.com/focus-creative-games/hybridclr' },
 ]
 </script>
 
@@ -249,6 +292,7 @@ const progressItems = [
   font-size: 18px;
   color: rgba(255,255,255,0.5);
   margin-bottom: 48px;
+  line-height: 1.6;
 }
 
 .hero-stats {
@@ -304,6 +348,43 @@ const progressItems = [
   text-align: center;
   margin-bottom: 48px;
   line-height: 1.7;
+}
+
+.section-desc code {
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+}
+
+/* IL2CPP advantages */
+.advantage-section {
+  padding: 100px 0;
+  background: var(--color-bg);
+}
+
+.advantage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.advantage-card {
+  padding: 28px;
+}
+
+.advantage-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin-bottom: 10px;
+}
+
+.advantage-card p {
+  font-size: 14px;
+  color: var(--color-text-light);
+  line-height: 1.7;
+  margin: 0;
 }
 
 /* Why Section */
@@ -492,9 +573,9 @@ const progressItems = [
   font-weight: 600;
 }
 
-.tag-partial {
-  background: rgba(234, 179, 8, 0.12);
-  color: #facc15;
+.tag-done {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
 }
 
 .tag-dev {
@@ -502,57 +583,42 @@ const progressItems = [
   color: #60a5fa;
 }
 
-/* Progress */
-.progress-section {
+/* Ecosystem */
+.ecosystem-section {
   padding: 100px 0;
   background: var(--color-bg);
 }
 
-.progress-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.progress-item {
+.eco-grid {
   display: grid;
-  grid-template-columns: 180px 1fr 80px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
 }
 
-.progress-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text);
-  text-align: right;
+.eco-card {
+  padding: 24px;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
 }
 
-.progress-bar {
-  height: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 4px;
-  overflow: hidden;
+.eco-card:hover {
+  border-color: rgba(139, 92, 246, 0.35);
+  transform: translateY(-2px);
 }
 
-.progress-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 1s ease;
+.eco-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin-bottom: 8px;
 }
 
-.progress-fill.done { background: linear-gradient(90deg, #22c55e, #4ade80); }
-.progress-fill.dev { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-.progress-fill.planned { background: linear-gradient(90deg, #6b7280, #9ca3af); }
-
-.progress-label {
-  font-size: 12px;
-  font-weight: 600;
+.eco-card p {
+  font-size: 13px;
+  color: var(--color-text-light);
+  margin: 0;
+  line-height: 1.5;
 }
-
-.progress-label.done { color: #4ade80; }
-.progress-label.dev { color: #60a5fa; }
-.progress-label.planned { color: #9ca3af; }
 
 /* CTA */
 .cta-section {
@@ -567,10 +633,20 @@ const progressItems = [
   flex-wrap: wrap;
 }
 
+.cta-contact {
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--color-text-light);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .advantage-grid {
+    grid-template-columns: 1fr;
   }
 
   .compare-grid {
@@ -590,13 +666,6 @@ const progressItems = [
   .pt-cell { padding: 8px 20px; }
   .pt-cell:first-child { padding-top: 16px; font-weight: 600; }
   .pt-cell:last-child { padding-bottom: 16px; }
-
-  .progress-item {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .progress-name { text-align: left; grid-column: 1 / -1; }
 
   .section-inner {
     padding: 0 20px;

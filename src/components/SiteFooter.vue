@@ -17,6 +17,9 @@
           <ul>
             <li><router-link to="/hybridclr">HybridCLR</router-link></li>
             <li><router-link to="/leanclr">LeanCLR</router-link></li>
+            <li><a href="https://www.zlua.cn/" target="_blank" rel="noopener">ZLua</a></li>
+            <li><a href="https://zen-ts.com/" target="_blank" rel="noopener">ZenTS</a></li>
+            <li><a href="https://github.com/focus-creative-games/luatier" target="_blank" rel="noopener">LuaTier</a></li>
             <li><router-link to="/luban">Luban</router-link></li>
             <li><a href="https://www.obfuz.com/" target="_blank" rel="noopener">Obfuz</a></li>
           </ul>
@@ -25,6 +28,9 @@
           <h4>资源</h4>
           <ul>
             <li><a href="https://www.hybridclr.cn/" target="_blank" rel="noopener">HybridCLR 文档</a></li>
+            <li><a href="https://doc.leanclr.com/" target="_blank" rel="noopener">LeanCLR 文档</a></li>
+            <li><a href="https://doc.zlua.cn/" target="_blank" rel="noopener">ZLua 文档</a></li>
+            <li><a href="https://zents.code-philosophy.com/" target="_blank" rel="noopener">ZenTS 文档</a></li>
             <li><a href="https://www.datable.cn/" target="_blank" rel="noopener">Luban 文档</a></li>
             <li><a href="https://www.obfuz.com/" target="_blank" rel="noopener">Obfuz 文档</a></li>
           </ul>
