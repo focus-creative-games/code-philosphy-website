@@ -17,11 +17,11 @@
           <ul>
             <li><router-link to="/hybridclr">HybridCLR</router-link></li>
             <li><router-link to="/leanclr">LeanCLR</router-link></li>
-            <li><a href="https://www.zlua.cn/" target="_blank" rel="noopener">ZLua</a></li>
-            <li><a href="https://zen-ts.com/" target="_blank" rel="noopener">ZenTS</a></li>
-            <li><a href="https://github.com/focus-creative-games/luatier" target="_blank" rel="noopener">LuaTier</a></li>
+            <li><router-link to="/zlua">ZLua</router-link></li>
+            <li><router-link to="/zents">ZenTS</router-link></li>
+            <li><router-link to="/luatier">LuaTier</router-link></li>
             <li><router-link to="/luban">Luban</router-link></li>
-            <li><a href="https://www.obfuz.com/" target="_blank" rel="noopener">Obfuz</a></li>
+            <li><router-link to="/obfuz">Obfuz</router-link></li>
           </ul>
         </div>
         <div class="footer-col">
