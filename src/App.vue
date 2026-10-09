@@ -1,50 +1,27 @@
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+import SiteHeader from './components/layout/SiteHeader.vue'
+import SiteFooter from './components/layout/SiteFooter.vue'
+import ScrollToTop from './components/layout/ScrollToTop.vue'
+import { useReveal } from './composables/useReveal'
+
+useReveal()
+</script>
+
 <template>
-  <div id="page">
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:border focus:border-accent focus:bg-base focus:px-3 focus:py-2 focus:text-sm focus:text-fg"
+  >
+    Skip to content
+  </a>
+
+  <div class="flex min-h-screen flex-col overflow-x-hidden">
     <SiteHeader />
-    <div id="content" class="site-content">
-      <router-view />
-    </div>
+    <main id="main" class="flex-1 pt-16">
+      <RouterView />
+    </main>
     <SiteFooter />
     <ScrollToTop />
   </div>
 </template>
-
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import SiteHeader from './components/SiteHeader.vue'
-import SiteFooter from './components/SiteFooter.vue'
-import ScrollToTop from './components/ScrollToTop.vue'
-
-// IntersectionObserver for fade-in-up animations
-function initScrollAnimations() {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-          observer.unobserve(entry.target)
-        }
-      })
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-  )
-
-  document.querySelectorAll('.fade-in-up').forEach((el) => {
-    observer.observe(el)
-  })
-}
-
-const router = useRouter()
-
-onMounted(() => {
-  initScrollAnimations()
-})
-
-// Re-run after each navigation
-router.afterEach(() => {
-  setTimeout(() => {
-    initScrollAnimations()
-  }, 100)
-})
-</script>

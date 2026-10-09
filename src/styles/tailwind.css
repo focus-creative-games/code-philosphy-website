@@ -1,0 +1,277 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════
+   Design tokens — "engineering blueprint" language
+   Dark console base, structural grid, single accent colour,
+   monospace carries all data.
+   ═══════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ─── Surfaces ───
+     Deliberately not near-black. A #0a0e16 base under #e8edf5 text is 16.5:1,
+     which reads as glare rather than contrast: at that ratio large dark areas
+     make light glyphs bloom (halation) and the page becomes tiring to read.
+     These values sit between GitHub Dark and One Dark at ~13:1 — still clearly
+     a dark console, comfortable for long technical reading. */
+  --color-base: #161b26;
+  --color-raised: #1d2330;
+  --color-sunken: #11161f;
+  --color-overlay: #232a39;
+
+  /* ─── Lines ───
+     Raised alongside the surfaces so structure stays visible: on a lighter
+     base the old line colours would have collapsed into the background. */
+  --color-line-faint: #242b3a;
+  --color-line: #333c4e;
+  --color-line-strong: #4a5569;
+
+  /* ─── Foreground ───
+     Off-white rather than white, and a muted tone light enough to stay
+     readable (5.1:1 on base) instead of decorative. */
+  --color-fg: #dde3ec;
+  --color-fg-secondary: #a3afc2;
+  --color-fg-muted: #78859b;
+
+  /* ─── Accent (the only one) ─── */
+  --color-accent: #5b95ff;
+  --color-accent-hover: #7eacff;
+  --color-accent-dim: #26406b;
+
+  /* ─── Data semantics ─── */
+  --color-data-pos: #4ec98b;
+  --color-data-neg: #e87872;
+  --color-data-warn: #e5ab4c;
+
+  /* ─── Product identity (small surfaces only) ─── */
+  --color-p-hybridclr: #4c8dff;
+  --color-p-leanclr: #7b6cf6;
+  --color-p-zlua: #3fbfbf;
+  --color-p-zents: #3f9fd9;
+  --color-p-luatier: #e0a33e;
+  --color-p-luban: #3fbf7f;
+  --color-p-obfuz: #d96070;
+
+  /* ─── Type ─── */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Mono', ui-monospace,
+    monospace;
+  --font-cjk: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+
+  /* ─── Blueprint grid ─── */
+  --spacing-grid: 72px;
+
+  /* ─── Motion (≤8px, 160–240ms) ─── */
+  --ease-out-blueprint: cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Base
+   ═══════════════════════════════════════════════════════════ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-base);
+    color: var(--color-fg-secondary);
+    font-family: var(--font-sans), var(--font-cjk);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: var(--color-fg);
+    font-family: var(--font-sans), var(--font-cjk);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  /* Data is always monospace */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  ::selection {
+    background: var(--color-accent-dim);
+    color: var(--color-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-sunken);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line);
+    border: 2px solid var(--color-sunken);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-line-strong);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Utilities
+   ═══════════════════════════════════════════════════════════ */
+
+/* Blueprint grid background — structure, not glow */
+@utility blueprint-grid {
+  background-image:
+    linear-gradient(to right, var(--color-line-faint) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line-faint) 1px, transparent 1px);
+  background-size: var(--spacing-grid) var(--spacing-grid);
+}
+
+/* Fades the grid out towards the edges */
+@utility blueprint-grid-mask {
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 30%, transparent 75%);
+}
+
+/* The one permitted gradient: the brand wordmark */
+@utility brand-wordmark {
+  /* Literal start colour, not var(--color-fg): keep it in step with that token
+     by hand if the palette moves again. */
+  background: linear-gradient(100deg, #dde3ec 10%, var(--color-accent) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Tabular monospace figures for all data */
+@utility data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Section eyebrow: 01 ── LABEL */
+@utility tick {
+  position: relative;
+  padding-left: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Reveal animation — ≤8px, 200ms
+   ═══════════════════════════════════════════════════════════ */
+
+@layer components {
+  .reveal {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 200ms var(--ease-out-blueprint),
+      transform 200ms var(--ease-out-blueprint);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Architecture diagrams draw their connectors in */
+  .draw-line {
+    stroke-dasharray: var(--draw-len, 200);
+    stroke-dashoffset: var(--draw-len, 200);
+    transition: stroke-dashoffset 600ms var(--ease-out-blueprint);
+  }
+
+  .is-visible .draw-line {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .draw-line {
+    stroke-dashoffset: 0;
+  }
+}

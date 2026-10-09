@@ -1,0 +1,55 @@
+<!--
+  Open Graph card template, 1200x630.
+
+  SVG is NOT reliably supported by OG/Twitter crawlers, so this file is the
+  SOURCE, not the asset that ships in the meta tags. Export it to
+  public/images/og/default.png (1200x630) and update DEFAULT_OG_IMAGE in
+  src/composables/useSeo.ts to point at the .png.
+
+  Duplicate this per product, swapping the accent tick colour and the three
+  text lines, to get per-product cards.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Inter, system-ui, sans-serif">
+  <rect width="1200" height="630" fill="#161B26"/>
+
+  <!-- Blueprint grid -->
+  <defs>
+    <pattern id="g" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M72 0H0v72" fill="none" stroke="#242B3A" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="m"><rect width="1200" height="630" fill="url(#fade)"/></mask>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)" mask="url(#m)"/>
+
+  <!-- Accent tick -->
+  <rect x="80" y="150" width="64" height="3" fill="#5B95FF"/>
+
+  <!-- Wordmark -->
+  <text x="80" y="134" fill="#A3AFC2" font-size="22" font-weight="500"
+        letter-spacing="3" font-family="ui-monospace, monospace">
+    CODE PHILOSOPHY
+  </text>
+
+  <!-- Headline -->
+  <text x="80" y="268" fill="#DDE3EC" font-size="68" font-weight="600" letter-spacing="-2">
+    Runtime infrastructure
+  </text>
+  <text x="80" y="348" fill="#A3AFC2" font-size="68" font-weight="600" letter-spacing="-2">
+    for game engineering
+  </text>
+
+  <!-- Figures -->
+  <text x="80" y="438" fill="#78859B" font-size="26" font-family="ui-monospace, monospace">
+    7 products · 14k+ stars · 1000+ commercial projects
+  </text>
+
+  <!-- Baseline rule + domain -->
+  <rect x="80" y="508" width="1040" height="1" fill="#333C4E"/>
+  <text x="80" y="556" fill="#5B95FF" font-size="24" font-family="ui-monospace, monospace">
+    code-philosophy.com
+  </text>
+</svg>
