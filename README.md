@@ -14,10 +14,19 @@ npm run dev
 ```sh
 npx tsc --noEmit
 npm run build
+npm run check:locales
 npm run preview
 ```
 
-构建先生成客户端资源，再由 `scripts/prerender.mjs` 使用 Vue 服务端渲染生成首页、六款产品页、商务页及保留的 LuaTier 页。发布目录为 `dist/`，不需要常驻服务端。
+构建先生成客户端资源，再由 `scripts/prerender.mjs` 使用 Vue 服务端渲染生成首页、六款产品页、商务页及保留的 LuaTier 页的中英文版本，共 20 个静态页面（含历史商务地址）。发布目录为 `dist/`，不需要常驻服务端。
+
+## 中英文
+
+中文保留原路径，英文使用 `/en/` 前缀，例如 `/hybridclr/` 与 `/en/hybridclr/`。页头语言按钮保留当前页面、查询参数和锚点，所有站内导航沿用所选语言。刷新或分享地址即可保留语言，无需依赖浏览器本地存储。
+
+`src/i18n/en.ts` 集中维护英文翻译，中文原文在组件及产品数据中维护。`useLocale()` 提供翻译与语言状态，`LocaleLink.vue` 为站内链接统一添加语言路径。新增中文内容时须补充对应英文词条。
+
+中英文页面分别提供 `lang`、标题、描述、canonical、Open Graph locale 和 hreflang；站点地图包含两种语言及对应关系。`npm run check:locales` 检查静态内容、英文遗漏、语言元数据、站内语言路径和本地资源。发布工作流会在构建后运行该检查。
 
 每个页面都有独立的 HTML、标题、描述与 canonical；构建同时输出 `sitemap.xml` 和 `robots.txt`。GitHub Pages 可以直接打开、刷新 `/hybridclr/` 等页面。旧 `/#/hybridclr` 链接会在客户端转换为新地址；拼写历史地址 `/bussiness` 仍可访问。
 

@@ -5,27 +5,32 @@ import {
 } from "vue-router";
 import Home from "../views/Home.vue";
 import { products } from "../data/products";
+import { pageMetadata } from "../i18n/metadata";
 
-const routes = [
-  { path: "/", name: "Home", component: Home },
-  ...products.map((product) => ({
-    path: "/" + product.id,
-    name: product.name,
-    component: () => import("../views/Product.vue"),
-  })),
-  {
-    path: "/luatier",
-    name: "LuaTier",
-    component: () => import("../views/LuaTier.vue"),
-  },
-  {
-    path: "/business",
-    alias: "/bussiness",
-    name: "Business",
-    component: () => import("../views/Business.vue"),
-  },
-  { path: "/:pathMatch(.*)*", redirect: "/" },
-];
+const routes = (["zh", "en"] as const).flatMap((locale) => {
+  const prefix = locale === "en" ? "/en" : "";
+  return [
+    { path: prefix + "/", name: prefix + "Home", component: Home },
+    ...products.map((product) => ({
+      path: prefix + "/" + product.id,
+      name: prefix + product.name,
+      meta: { productId: product.id },
+      component: () => import("../views/Product.vue"),
+    })),
+    {
+      path: prefix + "/luatier",
+      name: prefix + "LuaTier",
+      component: () => import("../views/LuaTier.vue"),
+    },
+    {
+      path: prefix + "/business",
+      alias: prefix + "/bussiness",
+      name: prefix + "Business",
+      component: () => import("../views/Business.vue"),
+    },
+    { path: prefix + "/:pathMatch(.*)*", redirect: prefix + "/" },
+  ];
+});
 
 // Preserve bookmarked URLs from the previous hash-based site.
 export const migratedLegacyRoute =
@@ -54,35 +59,20 @@ const router = createRouter({
 
 router.afterEach((to) => {
   if (import.meta.env.SSR) return;
-  const product = products.find((p) => p.name === to.name);
-  document.title = product
-    ? `${product.name} · ${product.category} | Code Philosophy`
-    : to.name === "Business"
-      ? "商务咨询 | Code Philosophy 代码哲学"
-      : to.name === "LuaTier"
-        ? "LuaTier | Code Philosophy 代码哲学"
-        : "Code Philosophy 代码哲学 — 为游戏研发，构建可靠的技术底座";
-  const description =
-    product?.description ||
-    "Code Philosophy（代码哲学）专注游戏行业的深度技术解决方案。探索 HybridCLR、Luban、LeanCLR、Obfuz、zlua 与 ZenTS。";
-  document
-    .querySelector('meta[name="description"]')
-    ?.setAttribute("content", description);
-  document
-    .querySelector('meta[property="og:title"]')
-    ?.setAttribute("content", document.title);
-  document
-    .querySelector('meta[property="og:description"]')
-    ?.setAttribute("content", description);
-  const canonicalPath =
-    to.name === "Business" ? "/business/" : to.path.replace(/\/?$/, "/");
-  const canonical = "https://code-philosophy.com" + canonicalPath;
-  document
-    .querySelector('link[rel="canonical"]')
-    ?.setAttribute("href", canonical);
-  document
-    .querySelector('meta[property="og:url"]')
-    ?.setAttribute("content", canonical);
+  const meta = pageMetadata(to.path);
+  document.documentElement.lang = meta.lang;
+  document.title = meta.title;
+  const set = (selector: string, attr: string, value: string) =>
+    document.querySelector(selector)?.setAttribute(attr, value);
+  set('meta[name="description"]', "content", meta.description);
+  set('meta[property="og:title"]', "content", meta.title);
+  set('meta[property="og:description"]', "content", meta.description);
+  set('meta[property="og:locale"]', "content", meta.ogLocale);
+  set('meta[property="og:url"]', "content", meta.url);
+  set('link[rel="canonical"]', "href", meta.url);
+  set('link[hreflang="zh-Hans"]', "href", meta.zhUrl);
+  set('link[hreflang="en"]', "href", meta.enUrl);
+  set('link[hreflang="x-default"]', "href", meta.zhUrl);
 });
 
 export default router;

@@ -1,8 +1,16 @@
+<script setup lang="ts">
+import { useLocale } from "../i18n";
+const { t } = useLocale();
+</script>
 <template>
   <div
     class="runtime-diagram"
     role="img"
-    aria-label="HybridCLR 概念架构：C# 代码编译为程序集，由 AOT 与解释执行共同运行于 Unity。"
+    :aria-label="
+      t(
+        'HybridCLR 概念架构：C# 代码编译为程序集，由 AOT 与解释执行共同运行于 Unity。',
+      )
+    "
   >
     <div class="diagram-top">
       <span><i class="status-dot"></i> HYBRID RUNTIME</span
@@ -11,7 +19,8 @@
     <div class="source-node">
       <span class="node-icon">C#</span>
       <div>
-        <strong>Your game. Your C#.</strong><small>业务逻辑 · 原生工作流</small>
+        <strong>Your game. Your C#.</strong
+        ><small>{{ t("业务逻辑 · 原生工作流") }}</small>
       </div>
       <span class="node-file">.cs</span>
     </div>
@@ -23,13 +32,14 @@
     <div class="runtime-pair">
       <div class="engine-node">
         <span class="engine-label">01 / NATIVE</span><strong>AOT</strong
-        ><small>预编译执行</small>
+        ><small>{{ t("预编译执行") }}</small>
         <div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
       <span class="engine-bridge">⇄</span>
       <div class="engine-node interpreter">
         <span class="engine-label">02 / DYNAMIC</span
-        ><strong>Interpreter</strong><small>解释执行 · 动态加载</small>
+        ><strong>Interpreter</strong
+        ><small>{{ t("解释执行 · 动态加载") }}</small>
         <div class="mini-blocks"><i></i><i></i><i></i><i></i></div>
       </div>
     </div>

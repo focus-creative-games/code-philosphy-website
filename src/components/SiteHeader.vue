@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { useLocale } from "../i18n";
+import LocaleLink from "../components/LocaleLink.vue";
 import { ref, watch, onMounted, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, RouterLink } from "vue-router";
+import { localizedPath } from "../i18n";
 import { products } from "../data/products";
+const { t, locale } = useLocale();
+
 const route = useRoute();
 const menuOpen = ref(false);
 const productsOpen = ref(false);
@@ -31,15 +36,27 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <a class="skip-link" href="#content">跳转到主要内容</a>
+  <a class="skip-link" href="#content">{{ t("跳转到主要内容") }}</a>
   <header ref="header" class="site-header">
     <div class="container header-inner">
-      <router-link to="/" class="brand" aria-label="Code Philosophy 首页"
+      <LocaleLink to="/" class="brand" :aria-label="t('Code Philosophy 首页')"
         ><span class="brand-symbol" aria-hidden="true"
           >c<span>p</span><i></i></span
         ><span class="brand-name"
-          >Code Philosophy<span>代码哲学</span></span
-        ></router-link
+          >Code Philosophy<span>{{ t("代码哲学") }}</span></span
+        ></LocaleLink
+      >
+      <RouterLink
+        class="language-switch"
+        :to="{
+          path: localizedPath(route.path, locale === 'en' ? 'zh' : 'en'),
+          query: route.query,
+          hash: route.hash,
+        }"
+        :lang="locale === 'en' ? 'zh-Hans' : 'en'"
+        :hreflang="locale === 'en' ? 'zh-Hans' : 'en'"
+        :aria-label="locale === 'en' ? '切换到中文' : 'Switch to English'"
+        >{{ locale === "en" ? "中文" : "EN" }}</RouterLink
       >
       <button
         class="menu-toggle"
@@ -47,27 +64,29 @@ onUnmounted(() => {
         :aria-expanded="menuOpen"
         @click="menuOpen = !menuOpen"
       >
-        {{ menuOpen ? "关闭 ×" : "菜单 ☰" }}
+        {{ menuOpen ? t("关闭 ×") : t("菜单 ☰") }}
       </button>
       <nav
         id="main-navigation"
-        aria-label="主导航"
+        :aria-label="t('主导航')"
         :class="['main-nav', { 'is-open': menuOpen }]"
       >
         <div class="product-nav">
           <button
             class="nav-link product-trigger"
-            :class="{ active: products.some((p) => route.name === p.name) }"
+            :class="{
+              active: products.some((p) => route.meta.productId === p.id),
+            }"
             :aria-expanded="productsOpen"
             aria-controls="product-menu"
             @click="productsOpen = !productsOpen"
           >
-            技术产品
-            <span class="chevron" :class="{ flipped: productsOpen }">⌄</span>
+            {{ t("技术产品")
+            }}<span class="chevron" :class="{ flipped: productsOpen }">⌄</span>
           </button>
           <div v-if="productsOpen" id="product-menu" class="product-dropdown">
             <span class="eyebrow dropdown-label">OUR PRODUCTS</span
-            ><router-link
+            ><LocaleLink
               v-for="p in products"
               :key="p.id"
               :to="'/' + p.id"
@@ -79,28 +98,28 @@ onUnmounted(() => {
                 >{{ p.mark }}</span
               ><span
                 ><strong>{{ p.name }}</strong
-                ><small>{{ p.category }}</small></span
-              ><span class="arrow">↗</span></router-link
+                ><small>{{ t(p.category) }}</small></span
+              ><span class="arrow">↗</span></LocaleLink
             >
           </div>
         </div>
-        <router-link
+        <LocaleLink
           class="nav-link"
           :to="{ path: '/', hash: '#solutions' }"
           @click="close"
-          >应用场景</router-link
+          >{{ t("应用场景") }}</LocaleLink
         >
-        <router-link
+        <LocaleLink
           class="nav-link"
           :to="{ path: '/', hash: '#developers' }"
           @click="close"
-          >开发者资源</router-link
+          >{{ t("开发者资源") }}</LocaleLink
         >
-        <router-link
+        <LocaleLink
           class="nav-link"
           :to="{ path: '/', hash: '#about' }"
           @click="close"
-          >关于我们</router-link
+          >{{ t("关于我们") }}</LocaleLink
         >
         <a
           class="nav-link github-link"
@@ -109,11 +128,11 @@ onUnmounted(() => {
           rel="noopener noreferrer"
           >GitHub <span>↗</span></a
         >
-        <router-link
+        <LocaleLink
           to="/business"
           class="button button-dark header-contact"
           @click="close"
-          >商务咨询 <span>↗</span></router-link
+          >{{ t("商务咨询") }}<span>↗</span></LocaleLink
         >
       </nav>
     </div>

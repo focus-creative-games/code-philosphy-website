@@ -4,30 +4,46 @@
       v-show="visible"
       class="scroll-to-top"
       @click="scrollToTop"
-      aria-label="回到顶部"
+      :aria-label="t('回到顶部')"
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 15l-6-6-6 6"/>
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M18 15l-6-6-6 6" />
       </svg>
     </button>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { useLocale } from "../i18n";
+import { ref, onMounted, onUnmounted } from "vue";
+const { t } = useLocale();
 
-const visible = ref(false)
+const visible = ref(false);
 
 function handleScroll() {
-  visible.value = window.scrollY > 300
+  visible.value = window.scrollY > 300;
 }
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+  window.scrollTo({
+    top: 0,
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth",
+  });
 }
 
-onMounted(() => window.addEventListener('scroll', handleScroll))
-onUnmounted(() => window.removeEventListener('scroll', handleScroll))
+onMounted(() => window.addEventListener("scroll", handleScroll));
+onUnmounted(() => window.removeEventListener("scroll", handleScroll));
 </script>
 
 <style scoped>
@@ -57,7 +73,9 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 
 .scroll-btn-enter-active,
 .scroll-btn-leave-active {
-  transition: opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
 }
 
 .scroll-btn-enter-from,
