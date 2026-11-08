@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f7f2"/>
+  <path d="M64 120H1136M64 536H1136M704 155V494" stroke="#d9e1d6"/>
+  <text x="65" y="83" font-family="Arial,sans-serif" font-size="29" font-weight="700" fill="#25352d">Code Philosophy<tspan fill="#285ce3">.</tspan></text>
+  <text x="65" y="205" font-family="monospace" font-size="13" letter-spacing="2" fill="#708772">ENGINEERING THE FOUNDATIONS OF PLAY</text>
+  <g font-family="Arial,sans-serif" font-size="67" font-weight="700" letter-spacing="-2"><text x="60" y="301" fill="#25352d">Built for developers.</text><text x="60" y="383" fill="#285ce3">Designed for games.</text></g>
+  <text x="65" y="464" font-family="Arial,sans-serif" font-size="20" fill="#74816f">Runtimes. Game configuration. Scripting. Code protection.</text>
+  <g fill="#fafcf8" stroke="#c3d0bf"><rect x="760" y="190" width="365" height="62" rx="6"/><rect x="760" y="280" width="170" height="104" rx="6"/><rect x="955" y="280" width="170" height="104" rx="6" fill="#eaf0ff" stroke="#b5c8ec"/><rect x="760" y="416" width="365" height="54" rx="6" fill="#263e32" stroke="#263e32"/></g>
+  <g stroke="#9fb49a" fill="none"><path d="M942 252V266H845V280M942 266H1040V280M845 384V400H1040V384M942 400V416"/></g>
+  <g font-family="Arial,sans-serif" text-anchor="middle"><text x="942" y="230" font-size="23" fill="#3b5942">C# / IL Assemblies</text><text x="845" y="341" font-size="30" fill="#46654c">AOT</text><text x="1040" y="341" font-size="24" fill="#3d66a5">Interpreter</text><text x="942" y="451" font-size="23" fill="#e8f2e5">HybridCLR</text></g>
+  <text x="65" y="578" font-family="monospace" font-size="15" fill="#72846c">HybridCLR / Luban / LeanCLR / Obfuz / zlua / ZenTS</text>
+  <text x="1135" y="578" text-anchor="end" font-family="Arial,sans-serif" font-size="15" fill="#72846c">code-philosophy.com</text>
+</svg>

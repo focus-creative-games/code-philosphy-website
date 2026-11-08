@@ -1,127 +1,87 @@
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const copied = ref(false);
+const email = "business@code-philosophy.com";
+const mailto = computed(
+  () =>
+    `mailto:${email}?subject=${encodeURIComponent("产品与技术服务咨询" + (route.query.product ? " - " + route.query.product : ""))}`,
+);
+async function copyEmail() {
+  try {
+    await navigator.clipboard.writeText(email);
+    copied.value = true;
+  } catch {
+    copied.value = false;
+  }
+}
+</script>
 <template>
-  <div class="business-page">
-    <!-- Contact Section -->
-    <section class="contact-section">
-      <div class="contact-glow glow-1"></div>
-      <div class="contact-glow glow-2"></div>
-      <div class="contact-decor decor-1"></div>
-      <div class="contact-decor decor-2"></div>
-      <div class="contact-inner fade-in-up">
-        <div class="contact-badge">Business</div>
-        <h1 class="contact-heading">商务联系</h1>
-        <h2 class="contact-subheading">如需购买商业版本，请邮件咨询</h2>
-        <div class="contact-detail">
-          <p>
-            请使用贵公司的<strong>企业邮箱</strong>向邮箱发起咨询，以 QQ 或者 126 邮箱之类发起的邮件会被忽略，敬请谅解。
-          </p>
-        </div>
-        <a href="mailto:business@code-philosophy.com" class="btn-glow btn-glow-primary cta-email">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          business@code-philosophy.com
-        </a>
+  <section class="business-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <router-link to="/">首页</router-link><span>/</span
+        ><span>商务咨询</span>
       </div>
-    </section>
-  </div>
+      <div class="business-grid">
+        <div>
+          <div class="eyebrow">LET’S WORK TOGETHER</div>
+          <h1>把技术问题，<br />交给懂技术的人。</h1>
+          <p>
+            从产品选型到商业版本，从项目集成到技术支持，<br />我们期待了解你的团队和正在构建的游戏。
+          </p>
+          <div class="business-services">
+            <span>商业版本授权</span><span>技术支持</span><span>项目合作</span>
+          </div>
+        </div>
+        <div class="contact-card">
+          <span class="eyebrow">BUSINESS INQUIRIES</span>
+          <h2>聊聊你的项目。</h2>
+          <p>
+            请使用贵公司的<strong>企业邮箱</strong>发起咨询。<br />QQ、126
+            等个人邮箱发起的咨询不予处理。
+          </p>
+          <a class="business-email" :href="mailto"
+            >business@<br />code-philosophy.com <span>↗</span></a
+          >
+          <div class="button-row">
+            <a :href="mailto" class="button button-primary"
+              >发送商务邮件 <span>↗</span></a
+            ><button class="button button-outline" @click="copyEmail">
+              {{ copied ? "已复制 ✓" : "复制邮箱" }}
+            </button>
+          </div>
+          <span class="copy-feedback" role="status">{{
+            copied
+              ? "商务邮箱已复制到剪贴板。"
+              : "欢迎在邮件中介绍你的团队与项目需求。"
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section inquiry-section">
+    <div class="container">
+      <div class="eyebrow">A GOOD CONVERSATION STARTS HERE</div>
+      <h2>让沟通，更进一步。</h2>
+      <div class="capability-grid">
+        <article>
+          <span class="feature-number">01</span>
+          <h3>介绍你的团队</h3>
+          <p>公司名称、项目阶段和联系人，帮助我们了解你的业务背景。</p>
+        </article>
+        <article>
+          <span class="feature-number">02</span>
+          <h3>描述技术需求</h3>
+          <p>感兴趣的产品、目标平台与引擎版本，以及你希望解决的问题。</p>
+        </article>
+        <article>
+          <span class="feature-number">03</span>
+          <h3>说明合作方向</h3>
+          <p>商业授权、版本试用或技术支持，让我们更好地理解你的预期。</p>
+        </article>
+      </div>
+    </div>
+  </section>
 </template>
-
-<style scoped>
-.business-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.contact-section {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: var(--gradient-hero);
-  padding: 140px 40px 100px;
-  overflow: hidden;
-}
-
-.contact-glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
-}
-
-.glow-1 { width: 500px; height: 500px; top: 10%; left: 10%; background: rgba(59, 130, 246, 0.08); }
-.glow-2 { width: 400px; height: 400px; bottom: 10%; right: 15%; background: rgba(139, 92, 246, 0.06); }
-
-.contact-decor {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  pointer-events: none;
-}
-
-.decor-1 { width: 300px; height: 300px; top: -50px; right: -50px; }
-.decor-2 { width: 200px; height: 200px; bottom: 60px; left: 40px; }
-
-.contact-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-  text-align: center;
-}
-
-.contact-badge {
-  display: inline-block;
-  padding: 6px 18px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  background: rgba(59, 130, 246, 0.12);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  margin-bottom: 24px;
-}
-
-.contact-heading {
-  font-size: clamp(36px, 5vw, 52px);
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 16px;
-}
-
-.contact-subheading {
-  font-size: clamp(18px, 2.5vw, 24px);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 32px;
-}
-
-.contact-detail {
-  font-size: 17px;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 40px;
-}
-
-.contact-detail strong {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.cta-email {
-  font-size: 16px;
-  padding: 16px 32px;
-}
-
-@media (max-width: 768px) {
-  .contact-section {
-    padding: 120px 20px 80px;
-  }
-
-  .cta-email {
-    font-size: 14px;
-    padding: 14px 24px;
-  }
-}
-</style>
